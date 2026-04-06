@@ -7,9 +7,11 @@
 	type Props = {
 		slides: CascadingSlide[];
 		ariaLabel?: string;
+		/** Constrain slide rail height to viewport (use on /clients with non-scrolling shell). */
+		fitViewport?: boolean;
 	};
 
-	let { slides, ariaLabel = 'Featured work' }: Props = $props();
+	let { slides, ariaLabel = 'Featured work', fitViewport = false }: Props = $props();
 
 	let wrap: HTMLDivElement | undefined = $state();
 
@@ -22,7 +24,14 @@
 </script>
 
 {#if slides.length}
-	<div bind:this={wrap} data-cascading-slider-wrap class="cascading-slider" aria-label={ariaLabel} aria-roledescription="carousel">
+	<div
+		bind:this={wrap}
+		data-cascading-slider-wrap
+		class="cascading-slider"
+		class:cascading-slider--fit-viewport={fitViewport}
+		aria-label={ariaLabel}
+		aria-roledescription="carousel"
+	>
 		<div class="cascading-slider__collection">
 			<div data-cascading-viewport class="cascading-slider__list">
 				{#each slides as slide (slide.id)}
@@ -78,49 +87,31 @@
 				type="button"
 				data-cascading-slider-prev
 				aria-label="Previous slide"
-				class="cascading-slider__button"
+				class="cascading-slider__button cascading-slider__button--prev"
 			>
-				<svg
-					class="cascading-slider__button-arrow is--prev"
+				<img
+					src="/carousel/arrow-left.svg"
+					alt=""
 					width="24"
 					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-					aria-hidden="true"
-				>
-					<path
-						d="M15 18l-6-6 6-6"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
-				</svg>
+					draggable="false"
+					class="cascading-slider__button-icon"
+				/>
 			</button>
 			<button
 				type="button"
 				data-cascading-slider-next
 				aria-label="Next slide"
-				class="cascading-slider__button"
+				class="cascading-slider__button cascading-slider__button--next"
 			>
-				<svg
-					class="cascading-slider__button-arrow"
+				<img
+					src="/carousel/arrow-right.svg"
+					alt=""
 					width="24"
 					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-					aria-hidden="true"
-				>
-					<path
-						d="M9 18l6-6-6-6"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-					/>
-				</svg>
+					draggable="false"
+					class="cascading-slider__button-icon"
+				/>
 			</button>
 		</nav>
 	</div>

@@ -17,7 +17,9 @@
 </script>
 
 <!-- Matches Squarespace: .header-title-logo img { width: auto; max-width: 100%; max-height: 20px; } -->
-<header class="pointer-events-none fixed inset-x-0 top-0 z-20 flex items-start justify-between px-5 pt-6 sm:px-8 sm:pt-8">
+<header
+	class="pointer-events-none fixed inset-x-0 top-0 z-20 flex shrink-0 items-start justify-between px-5 pt-6 sm:px-8 sm:pt-8"
+>
 	<a
 		href="/"
 		class="pointer-events-auto inline-flex max-w-full shrink-0 opacity-100 transition-opacity hover:opacity-75"

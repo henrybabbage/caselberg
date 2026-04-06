@@ -44,6 +44,16 @@ body {
 	-webkit-font-smoothing: antialiased;
 }
 
+/** Applied on /clients only — locks the shell to the viewport (see +layout.svelte). */
+html.clients-no-scroll,
+html.clients-no-scroll body {
+	height: 100%;
+	height: 100dvh;
+	max-height: 100dvh;
+	overflow: hidden;
+	overscroll-behavior: none;
+}
+
 /** About: explicit stack so Portable Text always uses Exposure (not only a Tailwind token). */
 .about-main-text {
 	font-family: var(--font-exposure);

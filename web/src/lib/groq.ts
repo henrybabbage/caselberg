@@ -13,6 +13,7 @@ export const homePageQuery = `*[_type == "homePage" && _id == "homePage"][0]{
   heroImage
 }`;
 
+/** Carousel slides: do not append `}[predicate]` directly — GROQ binds it to `image` (subscript). Filter in `mapSlides` instead. */
 export const clientsPageQuery = `*[_type == "clientsPage" && _id == "clientsPage"][0]{
   intro,
   carouselLabel,
@@ -24,7 +25,7 @@ export const clientsPageQuery = `*[_type == "clientsPage" && _id == "clientsPage
     imageMobile,
     imageTablet,
     projectUrl
-  }[defined(_id) && defined(image.asset)]
+  }
 }`;
 
 export const aboutPageQuery = `*[_type == "aboutPage" && _id == "aboutPage"][0]{

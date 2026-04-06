@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
@@ -22,13 +23,30 @@
 		data.siteSettings?.navigation?.length ? data.siteSettings.navigation : [...defaultNav]
 	);
 	const pathname = $derived(page.url.pathname);
+	const isClients = $derived(pathname === '/clients');
+
+	$effect(() => {
+		if (!browser) return;
+		const root = document.documentElement;
+		if (isClients) root.classList.add('clients-no-scroll');
+		else root.classList.remove('clients-no-scroll');
+		return () => root.classList.remove('clients-no-scroll');
+	});
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<div class="relative min-h-screen font-sans">
+<div
+	class="relative font-sans {isClients
+		? 'flex h-dvh max-h-dvh flex-col overflow-hidden'
+		: 'min-h-screen'}"
+>
 	<SiteHeader {siteName} logoUrl={data.logoUrl} {navigation} {pathname} />
-	<main class="min-h-screen px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-24">
+	<main
+		class="{isClients
+			? 'flex min-h-0 flex-1 flex-col overflow-hidden px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24'
+			: 'min-h-screen px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-24'}"
+	>
 		{@render children()}
 	</main>
 	<SiteFooter {siteName} initialAucklandTime={data.aucklandTime} />

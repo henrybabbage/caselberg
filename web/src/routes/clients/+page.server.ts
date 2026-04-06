@@ -18,6 +18,7 @@ function safeImageUrl(source: SanityImageSource | undefined): string | undefined
 function mapSlides(slides: ClientSlide[] | undefined): CascadingSlide[] {
 	const out: CascadingSlide[] = [];
 	for (const s of slides ?? []) {
+		if (!s?._id) continue;
 		const src = safeImageUrl(s.image as SanityImageSource);
 		if (!src) continue;
 		const slide: CascadingSlide = {

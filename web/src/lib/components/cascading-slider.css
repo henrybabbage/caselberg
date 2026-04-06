@@ -13,6 +13,7 @@
 	margin-left: auto;
 	margin-right: auto;
 	position: relative;
+	padding-bottom: env(safe-area-inset-bottom, 1em);
 }
 
 .cascading-slider__collection {
@@ -24,6 +25,11 @@
 	height: 35em;
 	position: relative;
 	overflow: hidden;
+}
+
+/** Clients: keep slide stack within viewport so the page does not scroll */
+.cascading-slider--fit-viewport .cascading-slider__list {
+	height: min(35em, max(12rem, calc(100dvh - 14.5rem)));
 }
 
 .cascading-slider__item {
@@ -73,16 +79,22 @@
 
 .cascading-slider__caption {
 	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
 	align-items: baseline;
+	justify-content: flex-start;
 	gap: 0.25em 2em;
 	padding: 1.5em 0 0;
 	overflow: hidden;
 	position: relative;
 }
 
+/* Mobile: name above description (Squarespace small view) */
 @media (max-width: 767px) {
 	.cascading-slider__caption {
-		flex-wrap: wrap;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.4em 0;
 	}
 }
 
@@ -100,6 +112,13 @@
 		transform 0.25s ease;
 }
 
+@media (max-width: 767px) {
+	.cascading-slider__title {
+		white-space: normal;
+		font-weight: 500;
+	}
+}
+
 .cascading-slider__description {
 	font-family: var(--font-sans);
 	font-size: 11px;
@@ -107,11 +126,20 @@
 	letter-spacing: 0.05em;
 	color: #0a0a0a;
 	line-height: 1.45;
+	flex: 1;
+	min-width: 0;
 	opacity: 0;
 	transform: translateY(0.5em);
 	transition:
 		opacity 0.25s ease,
 		transform 0.25s ease;
+}
+
+@media (max-width: 767px) {
+	.cascading-slider__description {
+		flex: none;
+		width: 100%;
+	}
 }
 
 .cascading-slider__caption.is--visible .cascading-slider__title {
@@ -131,12 +159,11 @@
 }
 
 .cascading-slider__nav {
-	grid-column-gap: 1em;
-	grid-row-gap: 1em;
 	flex-flow: row;
 	justify-content: center;
 	align-items: center;
-	margin-top: 3em;
+	gap: 1.75rem;
+	margin-top: 2rem;
 	margin-left: auto;
 	margin-right: auto;
 	display: flex;
@@ -150,17 +177,40 @@
 	border-radius: 2px;
 	justify-content: center;
 	align-items: center;
-	width: 3em;
-	height: 3em;
-	padding: 0.75em;
+	width: auto;
+	height: auto;
+	min-height: 0;
+	padding: 0.125rem;
 	display: flex;
 	cursor: pointer;
+	line-height: 0;
 }
 
 .cascading-slider__button:hover {
 	background-color: transparent;
+	opacity: 0.72;
 }
 
-.cascading-slider__button-arrow.is--prev {
-	transform: rotate(-180deg);
+/* Desktop (ref): next control in a light bordered square; prev is plain */
+@media (min-width: 768px) {
+	.cascading-slider__button--next {
+		border: 1px solid #0a0a0a;
+		border-radius: 2px;
+		padding: 0.2rem 0.35rem;
+	}
+}
+
+.cascading-slider__button-icon {
+	display: block;
+	width: 0.9375rem;
+	height: 0.9375rem;
+	object-fit: contain;
+	pointer-events: none;
+}
+
+@media (min-width: 768px) {
+	.cascading-slider__button-icon {
+		width: 1.125rem;
+		height: 1.125rem;
+	}
 }
