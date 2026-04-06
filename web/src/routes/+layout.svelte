@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
+	import { browser, dev } from '$app/environment';
+	import { env } from '$env/dynamic/public';
 	import { page } from '$app/state';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
@@ -24,6 +25,12 @@
 	);
 	const pathname = $derived(page.url.pathname);
 	const isClients = $derived(pathname === '/clients');
+
+	/** Absolute repo root for [sv-agentation](https://github.com/SikandarJODD/sv-agentation) “open in editor”. Set `PUBLIC_AGENTATION_WORKSPACE_ROOT` in `web/.env`. */
+	const agentationWorkspaceRoot = $derived.by((): string | null => {
+		const v = env.PUBLIC_AGENTATION_WORKSPACE_ROOT;
+		return typeof v === 'string' && v.trim().length > 0 ? v.trim() : null;
+	});
 
 	$effect(() => {
 		if (!browser) return;
@@ -51,3 +58,9 @@
 	</main>
 	<SiteFooter {siteName} initialAucklandTime={data.aucklandTime} />
 </div>
+
+{#if browser && dev}
+	{#await import('sv-agentation') then mod}
+		<mod.Agentation workspaceRoot={agentationWorkspaceRoot} />
+	{/await}
+{/if}
