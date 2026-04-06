@@ -1,0 +1,28 @@
+import { defineField, defineType } from 'sanity';
+
+export const clientsPageType = defineType({
+	name: 'clientsPage',
+	title: 'Clients page',
+	type: 'document',
+	fields: [
+		defineField({
+			name: 'intro',
+			title: 'Intro',
+			type: 'blockContent'
+		}),
+		defineField({
+			name: 'carouselLabel',
+			title: 'Carousel aria-label',
+			type: 'string',
+			initialValue: 'Featured work'
+		}),
+		defineField({
+			name: 'carouselSlides',
+			title: 'Carousel slides',
+			type: 'array',
+			of: [{ type: 'reference', to: [{ type: 'client' }] }],
+			description: 'Add at least one work slide for the carousel to appear on the site.',
+			validation: (Rule) => Rule.min(0)
+		})
+	]
+});

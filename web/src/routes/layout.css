@@ -1,0 +1,58 @@
+@import 'tailwindcss';
+
+@font-face {
+	font-family: 'Neue Haas Unica';
+	src: url('/fonts/NeueHaasUnica-Regular.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Neue Haas Unica';
+	src: url('/fonts/NeueHaasUnica-Italic.woff2') format('woff2');
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Exposure VAR';
+	src: url('/fonts/ExposureVAR.woff2') format('woff2');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Exposure VAR';
+	src: url('/fonts/ExposureVAR-Italic.woff2') format('woff2');
+	font-weight: 100 900;
+	font-style: italic;
+	font-display: swap;
+}
+
+@theme {
+	--font-sans: 'Neue Haas Unica', system-ui, sans-serif;
+	--font-exposure: 'Exposure VAR', ui-serif, Georgia, 'Times New Roman', serif;
+}
+
+body {
+	font-family: var(--font-sans);
+	background: #fff;
+	color: #0a0a0a;
+	-webkit-font-smoothing: antialiased;
+}
+
+/** About: explicit stack so Portable Text always uses Exposure (not only a Tailwind token). */
+.about-main-text {
+	font-family: var(--font-exposure);
+}
+
+.about-main-text :where(p, h1, h2, h3, h4, h5, h6, blockquote, li, a, strong, em, span) {
+	font-family: inherit;
+}
+
+a {
+	color: inherit;
+}

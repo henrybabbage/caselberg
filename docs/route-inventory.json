@@ -1,0 +1,65 @@
+{
+  "base": "https://www.caselbergstudio.com",
+  "routes": [
+    {
+      "path": "/",
+      "finalUrl": "https://www.caselbergstudio.com/",
+      "status": 200,
+      "title": "Caselberg Studio",
+      "tokens": {
+        "bodyFontFamily": "\"Helvetica Neue\", Helvetica, Arial, sans-serif",
+        "bodyFontSize": "16px",
+        "bodyColor": "rgb(10, 10, 10)",
+        "bodyBackground": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "path": "/about",
+      "finalUrl": "https://www.caselbergstudio.com/about",
+      "status": 200,
+      "title": "About — Caselberg Studio",
+      "tokens": {
+        "bodyFontFamily": "sans-serif",
+        "bodyFontSize": "16px",
+        "bodyColor": "rgb(10, 10, 10)",
+        "bodyBackground": "rgb(245, 245, 245)"
+      }
+    },
+    {
+      "path": "/cart",
+      "finalUrl": "https://www.caselbergstudio.com/cart",
+      "status": 200,
+      "title": "Caselberg Studio",
+      "tokens": {
+        "bodyFontFamily": "sans-serif",
+        "bodyFontSize": "16px",
+        "bodyColor": "rgb(10, 10, 10)",
+        "bodyBackground": "rgb(245, 245, 245)"
+      }
+    },
+    {
+      "path": "/clients",
+      "finalUrl": "https://www.caselbergstudio.com/clients",
+      "status": 200,
+      "title": "Caselberg Studio",
+      "tokens": {
+        "bodyFontFamily": "\"Helvetica Neue\", Helvetica, Arial, sans-serif",
+        "bodyFontSize": "16px",
+        "bodyColor": "rgb(10, 10, 10)",
+        "bodyBackground": "rgb(255, 255, 255)"
+      }
+    },
+    {
+      "path": "/contact",
+      "finalUrl": "https://www.caselbergstudio.com/contact",
+      "status": 200,
+      "title": "Contact — Caselberg Studio",
+      "tokens": {
+        "bodyFontFamily": "sans-serif",
+        "bodyFontSize": "16px",
+        "bodyColor": "rgb(10, 10, 10)",
+        "bodyBackground": "rgb(245, 245, 245)"
+      }
+    }
+  ]
+}
