@@ -6,13 +6,19 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import SiteFooter from '$lib/components/site-footer.svelte';
 	import SiteHeader from '$lib/components/site-header.svelte';
-	import type { SiteSettings } from '$lib/types/sanity';
+	import type { NavigationItem, SiteSettings } from '$lib/types/sanity';
 
 	const defaultNav = [
-		{ label: 'Clients', href: '/clients', isExternal: false },
+		{ label: 'Clients', href: '/', isExternal: false },
 		{ label: 'About', href: '/about', isExternal: false },
 		{ label: 'Contact', href: '/contact', isExternal: false }
 	] as const;
+
+	function normalizeNavigation(items: NavigationItem[]): NavigationItem[] {
+		return items.map((item) =>
+			!item.isExternal && item.href === '/clients' ? { ...item, href: '/' } : item
+		);
+	}
 
 	let { data, children } = $props<{
 		data: { siteSettings: SiteSettings | null; logoUrl: string; aucklandTime: string };
@@ -21,10 +27,12 @@
 
 	const siteName = $derived(data.siteSettings?.siteName ?? 'Caselberg Studio');
 	const navigation = $derived(
-		data.siteSettings?.navigation?.length ? data.siteSettings.navigation : [...defaultNav]
+		data.siteSettings?.navigation?.length
+			? normalizeNavigation(data.siteSettings.navigation)
+			: [...defaultNav]
 	);
 	const pathname = $derived(page.url.pathname);
-	const isClients = $derived(pathname === '/clients');
+	const isClients = $derived(pathname === '/' || pathname === '/clients');
 
 	/** Absolute repo root for [sv-agentation](https://github.com/SikandarJODD/sv-agentation) “open in editor”. Set `PUBLIC_AGENTATION_WORKSPACE_ROOT` in `web/.env`. */
 	const agentationWorkspaceRoot = $derived.by((): string | null => {

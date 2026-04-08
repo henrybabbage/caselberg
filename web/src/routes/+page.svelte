@@ -1,38 +1,37 @@
 <script lang="ts">
-	import { urlForImage } from '$lib/image-url';
-	import type { SanityImageSource } from '@sanity/image-url';
-	import type { HomePage } from '$lib/types/sanity';
+	import CascadingSlider from '$lib/components/cascading-slider.svelte';
+	import PortableText from '$lib/components/portable-text.svelte';
+	import type { CascadingSlide } from '$lib/types/cascading';
+	import type { ClientsPage } from '$lib/types/sanity';
 
-	let { data } = $props<{ data: { homePage: HomePage | null } }>();
-
-	const heroSrc = $derived(
-		data.homePage?.heroImage ? urlForImage(data.homePage.heroImage as SanityImageSource) : undefined
-	);
+	let { data } = $props<{
+		data: { clientsPage: ClientsPage | null; slides: CascadingSlide[] };
+	}>();
 </script>
 
 <svelte:head>
-	<title>{data.homePage?.title?.trim() ? data.homePage.title : 'Caselberg Studio'}</title>
+	<title>Caselberg Studio</title>
 </svelte:head>
 
-<section class="mx-auto max-w-4xl">
-	{#if data.homePage?.title?.trim()}
-		<h1 class="text-3xl font-normal tracking-tight text-[#0a0a0a] md:text-4xl">
-			{data.homePage.title}
-		</h1>
+<div class="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col overflow-hidden pt-4">
+	<h1 class="sr-only">Clients</h1>
+	{#if data.clientsPage?.intro?.length}
+		<div class="mb-4 shrink-0">
+			<PortableText value={data.clientsPage?.intro} />
+		</div>
 	{/if}
-	{#if data.homePage?.subtitle}
-		<p class="mt-6 max-w-xl text-sm leading-relaxed text-[#0a0a0a]/80">
-			{data.homePage.subtitle}
+
+	{#if data.slides.length}
+		<div class="flex min-h-0 min-w-0 flex-1 flex-col justify-center">
+			<CascadingSlider
+				slides={data.slides}
+				ariaLabel={data.clientsPage?.carouselLabel}
+				fitViewport
+			/>
+		</div>
+	{:else}
+		<p class="rounded border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+			Add work slides in Sanity and assign them to the Clients page carousel.
 		</p>
 	{/if}
-	{#if heroSrc}
-		<img
-			src={heroSrc}
-			alt=""
-			class="w-full max-h-[70vh] object-cover {data.homePage?.title?.trim() || data.homePage?.subtitle
-				? 'mt-10'
-				: ''}"
-			loading="lazy"
-		/>
-	{/if}
-</section>
+</div>
