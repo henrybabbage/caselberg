@@ -72,6 +72,10 @@ a {
 	animation-duration: 1.5s;
 	animation-timing-function: cubic-bezier(0.87, 0, 0.13, 1);
 	animation-fill-mode: both;
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
+	transform-origin: 50% 50%;
+	will-change: transform, opacity, filter;
 }
 
 ::view-transition-old(root) {
@@ -85,22 +89,28 @@ a {
 @keyframes layout-view-transition-move-out {
 	from {
 		opacity: 1;
-		transform: translateX(0);
+		filter: blur(0px);
+		transform: perspective(1400px) translateZ(0) scale(1);
 	}
 
 	to {
-		opacity: 0.4;
-		transform: translateX(35%);
+		opacity: 0;
+		filter: blur(10px);
+		transform: perspective(1400px) translateZ(-200px) scale(0.94);
 	}
 }
 
 @keyframes layout-view-transition-move-in {
 	from {
-		clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+		opacity: 0;
+		filter: blur(10px);
+		transform: perspective(1400px) translateZ(260px) scale(1.02);
 	}
 
 	to {
-		clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+		opacity: 1;
+		filter: blur(0px);
+		transform: perspective(1400px) translateZ(0) scale(1);
 	}
 }
 
