@@ -66,3 +66,47 @@ html.clients-no-scroll body {
 a {
 	color: inherit;
 }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 1.5s;
+	animation-timing-function: cubic-bezier(0.87, 0, 0.13, 1);
+	animation-fill-mode: both;
+}
+
+::view-transition-old(root) {
+	animation-name: layout-view-transition-move-out;
+}
+
+::view-transition-new(root) {
+	animation-name: layout-view-transition-move-in;
+}
+
+@keyframes layout-view-transition-move-out {
+	from {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	to {
+		opacity: 0.4;
+		transform: translateX(35%);
+	}
+}
+
+@keyframes layout-view-transition-move-in {
+	from {
+		clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+	}
+
+	to {
+		clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation: none;
+	}
+}

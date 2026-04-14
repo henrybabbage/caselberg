@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onNavigate } from '$app/navigation';
 	import { browser, dev } from '$app/environment';
 	import { env } from '$env/dynamic/public';
 	import { page } from '$app/state';
@@ -17,6 +18,14 @@
 	function normalizeNavigation(items: NavigationItem[]): NavigationItem[] {
 		return items.map((item) =>
 			!item.isExternal && item.href === '/clients' ? { ...item, href: '/' } : item
+		);
+	}
+
+	function supportsViewTransitions(): boolean {
+		return (
+			browser &&
+			typeof document.startViewTransition === 'function' &&
+			!window.matchMedia('(prefers-reduced-motion: reduce)').matches
 		);
 	}
 
@@ -46,6 +55,19 @@
 		if (isClients) root.classList.add('clients-no-scroll');
 		else root.classList.remove('clients-no-scroll');
 		return () => root.classList.remove('clients-no-scroll');
+	});
+
+	onNavigate((navigation) => {
+		if (!supportsViewTransitions()) return;
+		if (!navigation.to?.route?.id) return;
+		if (navigation.to.url.pathname === (navigation.from?.url.pathname ?? page.url.pathname)) return;
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
 	});
 </script>
 
