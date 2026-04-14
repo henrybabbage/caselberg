@@ -76,6 +76,7 @@ a {
 	backface-visibility: hidden;
 	transform-origin: 50% 50%;
 	will-change: transform, opacity, filter;
+	--vt-shift-y: clamp(48px, 8vh, 120px);
 }
 
 ::view-transition-old(root) {
@@ -90,13 +91,14 @@ a {
 	from {
 		opacity: 1;
 		filter: blur(0px);
-		transform: perspective(1400px) translateZ(0) scale(1);
+		transform: perspective(1400px) translateY(0) translateZ(0) scale(1);
 	}
 
 	to {
 		opacity: 0;
 		filter: blur(10px);
-		transform: perspective(1400px) translateZ(-200px) scale(0.94);
+		transform: perspective(1400px) translateY(calc(var(--vt-shift-y) * -1))
+			translateZ(-200px) scale(0.94);
 	}
 }
 
@@ -104,13 +106,14 @@ a {
 	from {
 		opacity: 0;
 		filter: blur(10px);
-		transform: perspective(1400px) translateZ(260px) scale(1.02);
+		transform: perspective(1400px) translateY(var(--vt-shift-y)) translateZ(260px)
+			scale(1.02);
 	}
 
 	to {
 		opacity: 1;
 		filter: blur(0px);
-		transform: perspective(1400px) translateZ(0) scale(1);
+		transform: perspective(1400px) translateY(0) translateZ(0) scale(1);
 	}
 }
 
