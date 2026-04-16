@@ -69,51 +69,45 @@ a {
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-	animation-duration: 1.5s;
-	animation-timing-function: cubic-bezier(0.87, 0, 0.13, 1);
+	animation-duration: 1.2s;
+	animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
 	animation-fill-mode: both;
 	transform-style: preserve-3d;
 	backface-visibility: hidden;
-	transform-origin: 50% 50%;
-	will-change: transform, opacity, filter;
-	--vt-shift-y: clamp(48px, 8vh, 120px);
+	will-change: transform, clip-path, filter;
 }
 
 ::view-transition-old(root) {
-	animation-name: layout-view-transition-move-out;
+	animation-name: parallax-wipe-out, darken-out;
+	z-index: 2;
+	transform-origin: 50% 0%;
 }
 
 ::view-transition-new(root) {
-	animation-name: layout-view-transition-move-in;
+	animation: none;
+	z-index: 1;
 }
 
-@keyframes layout-view-transition-move-out {
+@keyframes parallax-wipe-out {
 	from {
-		opacity: 1;
-		filter: blur(0px);
-		transform: perspective(1400px) translateY(0) translateZ(0) scale(1);
+		clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+		transform: perspective(1400px) translateZ(0px) translateY(0px);
 	}
-
 	to {
-		opacity: 0;
-		filter: blur(10px);
-		transform: perspective(1400px) translateY(calc(var(--vt-shift-y) * -1))
-			translateZ(-200px) scale(0.94);
+		clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+		transform: perspective(1400px) translateZ(300px) translateY(100px);
 	}
 }
 
-@keyframes layout-view-transition-move-in {
-	from {
-		opacity: 0;
-		filter: blur(10px);
-		transform: perspective(1400px) translateY(var(--vt-shift-y)) translateZ(260px)
-			scale(1.02);
+@keyframes darken-out {
+	0%, 15% {
+		filter: brightness(100%);
 	}
-
-	to {
-		opacity: 1;
-		filter: blur(0px);
-		transform: perspective(1400px) translateY(0) translateZ(0) scale(1);
+	50% {
+		filter: brightness(75%);
+	}
+	100% {
+		filter: brightness(50%);
 	}
 }
 
