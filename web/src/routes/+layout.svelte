@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { onNavigate } from '$app/navigation';
-	import { browser, dev } from '$app/environment';
-	import { env } from '$env/dynamic/public';
-	import { page } from '$app/state';
-	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
-	import SiteFooter from '$lib/components/site-footer.svelte';
-	import SiteHeader from '$lib/components/site-header.svelte';
-	import type { NavigationItem, SiteSettings } from '$lib/types/sanity';
+	import { browser, dev } from '$app/environment'
+	import { onNavigate } from '$app/navigation'
+	import { page } from '$app/state'
+	import { env } from '$env/dynamic/public'
+	import favicon from '$lib/assets/favicon.svg'
+	import SiteFooter from '$lib/components/site-footer.svelte'
+	import SiteHeader from '$lib/components/site-header.svelte'
+	import type { NavigationItem, SiteSettings } from '$lib/types/sanity'
+	import './layout.css'
 
 	const defaultNav = [
 		{ label: 'Clients', href: '/', isExternal: false },
@@ -80,6 +80,7 @@
 >
 	<SiteHeader {siteName} logoUrl={data.logoUrl} {navigation} {pathname} />
 	<main
+		style="view-transition-name: page-content"
 		class="{isClients
 			? 'flex min-h-0 flex-1 flex-col overflow-hidden px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24'
 			: 'min-h-screen px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-24'}"
