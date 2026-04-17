@@ -184,20 +184,25 @@
 	display: flex;
 	cursor: pointer;
 	line-height: 0;
+	outline: none;
 }
 
 .cascading-slider__button:hover {
 	background-color: transparent;
 	opacity: 0.72;
+	outline: none;
 }
 
-/* Desktop (ref): next control in a light bordered square; prev is plain */
-@media (min-width: 768px) {
-	.cascading-slider__button--next {
-		border: 1px solid #0a0a0a;
-		border-radius: 2px;
-		padding: 0.2rem 0.35rem;
-	}
+.cascading-slider__button:focus {
+	outline: none;
+}
+
+.cascading-slider__button:active {
+	outline: none;
+}
+
+.cascading-slider__button:focus-visible {
+	outline: none;
 }
 
 .cascading-slider__button-icon {
