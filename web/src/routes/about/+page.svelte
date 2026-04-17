@@ -17,8 +17,8 @@
 	class="flex w-full min-h-[calc(100vh-12rem)] flex-col items-center justify-center sm:min-h-[calc(100vh-10rem)]"
 >
 	<div
-		class="about-main-text w-fit max-w-[19.722rem] text-left text-[0.8767rem] font-normal leading-[1.4] text-[#0a0a0a] [&_p]:m-0 [&_p+p]:mt-4"
+		class="about-main-text w-full max-w-lg text-left text-[0.8767rem] font-normal leading-[1.4] text-[#0a0a0a] sm:max-w-xl [&_p]:m-0 [&_p+p]:mt-4"
 	>
-		<PortableText value={data.aboutPage?.body} class="!text-left !leading-[1.4]" />
+		<PortableText value={data.aboutPage?.body} class="text-left! leading-[1.4]!" />
 	</div>
 </div>

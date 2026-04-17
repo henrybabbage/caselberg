@@ -27,6 +27,9 @@ function mapSlides(slides: ClientSlide[] | undefined): CascadingSlide[] {
 			description: s.description ?? '',
 			src
 		};
+		if ((s.name ?? '').trim().toLowerCase() === 'ohen') {
+			slide.objectPosition = 'top';
+		}
 		const mobile = safeImageUrl(s.imageMobile as SanityImageSource);
 		const tablet = safeImageUrl(s.imageTablet as SanityImageSource);
 		if (mobile) slide.srcMobile = mobile;

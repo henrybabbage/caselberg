@@ -59,6 +59,7 @@
 											loading="eager"
 											draggable="false"
 											class="cascading-slider__img"
+											style:object-position={slide.objectPosition}
 										/>
 									</picture>
 								{:else}
@@ -68,6 +69,7 @@
 										loading="eager"
 										draggable="false"
 										class="cascading-slider__img"
+										style:object-position={slide.objectPosition}
 									/>
 								{/if}
 							</div>
