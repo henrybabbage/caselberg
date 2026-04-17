@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { browser, dev } from '$app/environment';
-	import { env } from '$env/dynamic/public';
-	import { page } from '$app/state';
-	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
-	import SiteFooter from '$lib/components/site-footer.svelte';
-	import SiteHeader from '$lib/components/site-header.svelte';
-	import type { NavigationItem, SiteSettings } from '$lib/types/sanity';
+	import { browser, dev } from '$app/environment'
+	import { onNavigate } from '$app/navigation'
+	import { page } from '$app/state'
+	import { env } from '$env/dynamic/public'
+	import favicon from '$lib/assets/favicon.svg'
+	import SiteFooter from '$lib/components/site-footer.svelte'
+	import SiteHeader from '$lib/components/site-header.svelte'
+	import type { NavigationItem, SiteSettings } from '$lib/types/sanity'
+	import './layout.css'
 
 	const defaultNav = [
 		{ label: 'Clients', href: '/', isExternal: false },
@@ -17,6 +18,14 @@
 	function normalizeNavigation(items: NavigationItem[]): NavigationItem[] {
 		return items.map((item) =>
 			!item.isExternal && item.href === '/clients' ? { ...item, href: '/' } : item
+		);
+	}
+
+	function supportsViewTransitions(): boolean {
+		return (
+			browser &&
+			typeof document.startViewTransition === 'function' &&
+			!window.matchMedia('(prefers-reduced-motion: reduce)').matches
 		);
 	}
 
@@ -47,6 +56,19 @@
 		else root.classList.remove('clients-no-scroll');
 		return () => root.classList.remove('clients-no-scroll');
 	});
+
+	onNavigate((navigation) => {
+		if (!supportsViewTransitions()) return;
+		if (!navigation.to?.route?.id) return;
+		if (navigation.to.url.pathname === (navigation.from?.url.pathname ?? page.url.pathname)) return;
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
@@ -58,6 +80,7 @@
 >
 	<SiteHeader {siteName} logoUrl={data.logoUrl} {navigation} {pathname} />
 	<main
+		style="view-transition-name: page-content"
 		class="{isClients
 			? 'flex min-h-0 flex-1 flex-col overflow-hidden px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24'
 			: 'min-h-screen px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-24'}"
