@@ -5,4 +5,5 @@ export type CascadingSlide = {
 	src: string;
 	srcMobile?: string;
 	srcTablet?: string;
+	objectPosition?: string;
 };
