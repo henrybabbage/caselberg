@@ -4,13 +4,12 @@ import {Draggable} from 'gsap/Draggable'
 import {Flip} from 'gsap/Flip'
 import {Observer} from 'gsap/Observer'
 import {ScrollTrigger} from 'gsap/ScrollTrigger'
-import {SplitText} from 'gsap/SplitText'
 
-gsap.registerPlugin(Flip, SplitText, Draggable, ScrollTrigger, Observer, CustomEase)
+gsap.registerPlugin(Flip, Draggable, ScrollTrigger, Observer, CustomEase)
 
 gsap.config({
   autoSleep: 60,
   nullTargetWarn: false,
 })
 
-export {CustomEase, Draggable, Flip, gsap, Observer, ScrollTrigger, SplitText}
+export {CustomEase, Draggable, Flip, gsap, Observer, ScrollTrigger}
