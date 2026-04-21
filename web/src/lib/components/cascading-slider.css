@@ -16,12 +16,13 @@
 	padding-bottom: env(safe-area-inset-bottom, 1em);
 }
 
-/** Clients: fill main’s flex height so caption + nav stay in view (not 100dvh math). */
+/** Clients: column layout; collection wraps the rail only so caption + nav follow directly below. */
 .cascading-slider--fit-viewport {
 	display: flex;
 	flex-direction: column;
-	flex: 1 1 auto;
-	min-height: 0;
+	flex: 0 0 auto;
+	width: 100%;
+	min-height: min-content;
 }
 
 .cascading-slider__collection {
@@ -29,7 +30,7 @@
 }
 
 .cascading-slider--fit-viewport .cascading-slider__collection {
-	flex: 1 1 auto;
+	flex: 0 0 auto;
 	min-height: 0;
 	display: flex;
 	flex-direction: column;
@@ -43,10 +44,9 @@
 }
 
 .cascading-slider--fit-viewport .cascading-slider__list {
-	flex: 1 1 auto;
+	flex: 0 0 auto;
+	height: min(35em, 65vh);
 	min-height: 12rem;
-	max-height: 35em;
-	height: auto;
 }
 
 @media (max-width: 767px) {
@@ -55,7 +55,7 @@
 	}
 
 	.cascading-slider--fit-viewport .cascading-slider__nav {
-		margin-top: 1.25rem;
+		margin-top: 0.875rem;
 	}
 }
 
@@ -191,15 +191,17 @@
 }
 
 .cascading-slider__nav {
+	flex: 0 0 auto;
 	flex-flow: row;
 	justify-content: center;
 	align-items: center;
 	gap: 1.75rem;
-	margin-top: 2rem;
+	margin-top: 1.125rem;
 	margin-left: auto;
 	margin-right: auto;
 	display: flex;
 	position: relative;
+	min-height: min-content;
 }
 
 .cascading-slider__button {
@@ -215,13 +217,18 @@
 	align-items: center;
 	width: auto;
 	height: auto;
-	min-height: 0;
-	padding: 0.125rem;
+	min-width: 1.75rem;
+	min-height: 1.75rem;
+	padding: 0.25rem;
 	display: flex;
 	cursor: pointer;
 	line-height: 0;
 	outline: none;
-	transition: opacity 0.15s ease;
+	transform: scale(1);
+	transform-origin: center;
+	transition:
+		opacity 0.15s ease,
+		transform 0.1s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .cascading-slider__button:hover,
@@ -240,8 +247,12 @@
 	opacity: 0.72;
 }
 
-.cascading-slider__button:active .cascading-slider__button-icon {
-	transform: scale(0.96);
+.cascading-slider__button:active,
+.cascading-slider__button--pressed {
+	transform: scale(0.86);
+	transition:
+		opacity 0.15s ease,
+		transform 0.05s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .cascading-slider__button:focus-visible {
@@ -261,6 +272,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.cascading-slider__button {
+		transition: opacity 0.15s ease;
+	}
+
+	.cascading-slider__button:active,
+	.cascading-slider__button--pressed {
+		transform: none;
+	}
+
 	.cascading-slider__button-icon {
 		transition-duration: 0.01ms;
 	}

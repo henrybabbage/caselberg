@@ -3,11 +3,14 @@
 	import { onNavigate } from '$app/navigation'
 	import { page } from '$app/state'
 	import { env } from '$env/dynamic/public'
-	import favicon from '$lib/assets/favicon.svg'
+	import type { SanityImageSource } from '@sanity/image-url'
 	import SiteFooter from '$lib/components/site-footer.svelte'
 	import SiteHeader from '$lib/components/site-header.svelte'
+	import { urlForImage } from '$lib/image-url'
 	import type { NavigationItem, SiteSettings } from '$lib/types/sanity'
 	import './layout.css'
+
+	const siteOrigin = 'https://caselbergstudio.com'
 
 	const defaultNav = [
 		{ label: 'Clients', href: '/', isExternal: false },
@@ -42,6 +45,11 @@
 	);
 	const pathname = $derived(page.url.pathname);
 	const isClients = $derived(pathname === '/' || pathname === '/clients');
+	const pageUrl = $derived(new URL(pathname, siteOrigin).href);
+	const defaultOgImageUrl = $derived(
+		urlForImage(data.siteSettings?.defaultOgImage as SanityImageSource | undefined)
+	);
+	const twitterCard = $derived(defaultOgImageUrl ? 'summary_large_image' : 'summary');
 
 	/** Absolute repo root for [sv-agentation](https://github.com/SikandarJODD/sv-agentation) “open in editor”. Set `PUBLIC_AGENTATION_WORKSPACE_ROOT` in `web/.env`. */
 	const agentationWorkspaceRoot = $derived.by((): string | null => {
@@ -71,7 +79,17 @@
 	});
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<link rel="icon" href="/favicon.png" type="image/png" />
+	<link rel="apple-touch-icon" href="/favicon.png" />
+	<link rel="canonical" href={pageUrl} />
+	<meta property="og:url" content={pageUrl} />
+	<meta name="twitter:card" content={twitterCard} />
+	{#if defaultOgImageUrl}
+		<meta property="og:image" content={defaultOgImageUrl} />
+		<meta name="twitter:image" content={defaultOgImageUrl} />
+	{/if}
+</svelte:head>
 
 <div
 	class="relative font-sans {isClients
@@ -82,7 +100,7 @@
 	<main
 		style="view-transition-name: page-content"
 		class="{isClients
-			? 'flex min-h-0 flex-1 flex-col overflow-hidden px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24'
+			? 'relative z-30 flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24'
 			: 'min-h-screen px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-24'}"
 	>
 		{@render children()}
