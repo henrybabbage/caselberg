@@ -15,6 +15,15 @@ function safeImageUrl(source: SanityImageSource | undefined): string | undefined
 	}
 }
 
+const allowedObjectPositions = new Set(['top', 'bottom']);
+
+function sanitizeImageObjectPosition(raw: string | undefined): string | undefined {
+	if (!raw || typeof raw !== 'string') return undefined;
+	const v = raw.trim().toLowerCase();
+	if (!allowedObjectPositions.has(v)) return undefined;
+	return v;
+}
+
 function mapSlides(slides: ClientSlide[] | undefined): CascadingSlide[] {
 	const out: CascadingSlide[] = [];
 	for (const s of slides ?? []) {
@@ -27,6 +36,8 @@ function mapSlides(slides: ClientSlide[] | undefined): CascadingSlide[] {
 			description: s.description ?? '',
 			src
 		};
+		const pos = sanitizeImageObjectPosition(s.imageObjectPosition);
+		if (pos) slide.imageObjectPosition = pos;
 		const mobile = safeImageUrl(s.imageMobile as SanityImageSource);
 		const tablet = safeImageUrl(s.imageTablet as SanityImageSource);
 		if (mobile) slide.srcMobile = mobile;

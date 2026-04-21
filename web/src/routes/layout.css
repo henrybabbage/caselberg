@@ -32,9 +32,28 @@
 	font-display: swap;
 }
 
+/** Same files as Exposure VAR; use this family name where design specifies “Exposure Trial”. */
+@font-face {
+	font-family: 'Exposure Trial';
+	src: url('/fonts/ExposureVAR.woff2') format('woff2');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Exposure Trial';
+	src: url('/fonts/ExposureVAR-Italic.woff2') format('woff2');
+	font-weight: 100 900;
+	font-style: italic;
+	font-display: swap;
+}
+
 @theme {
 	--font-sans: 'Neue Haas Unica', system-ui, sans-serif;
 	--font-exposure: 'Exposure VAR', ui-serif, Georgia, 'Times New Roman', serif;
+	--font-exposure-trial: 'Exposure Trial', 'Exposure VAR', ui-serif, Georgia,
+		'Times New Roman', serif;
 }
 
 body {
@@ -54,9 +73,10 @@ html.clients-no-scroll body {
 	overscroll-behavior: none;
 }
 
-/** About: explicit stack so Portable Text always uses Exposure (not only a Tailwind token). */
+/** About: Portable Text uses Exposure Trial (see @font-face). */
 .about-main-text {
-	font-family: var(--font-exposure);
+	font-family: var(--font-exposure-trial);
+	font-weight: 30;
 }
 
 .about-main-text :where(p, h1, h2, h3, h4, h5, h6, blockquote, li, a, strong, em, span) {
@@ -121,5 +141,66 @@ a {
 	::view-transition-old(page-content),
 	::view-transition-new(page-content) {
 		animation: none;
+	}
+}
+
+/* Underline Link Animation */
+.underline-link {
+	color: inherit;
+	font-size: 1em;
+	line-height: 1.25;
+}
+
+[data-underline-link] {
+	text-decoration: none;
+	position: relative;
+}
+
+[data-underline-link]::before,
+[data-underline-link='alt']::before,
+[data-underline-link='alt']::after {
+	content: '';
+	position: absolute;
+	bottom: -0.0625em;
+	left: 0;
+	width: 100%;
+	height: 0.0625em;
+	background-color: currentColor;
+	transition: transform 0.735s cubic-bezier(0.625, 0.05, 0, 1);
+	transform-origin: right;
+	transform: scaleX(0) rotate(0.001deg);
+}
+
+[data-underline-link='alt']::before {
+	transform-origin: left;
+	transform: scaleX(1) rotate(0.001deg);
+	transition-delay: 0.3s;
+}
+
+[data-underline-link='alt']::after {
+	transform-origin: right;
+	transform: scaleX(0) rotate(0.001deg);
+	transition-delay: 0s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	[data-hover]:hover [data-underline-link]::before,
+	[data-underline-link]:hover::before {
+		transform-origin: left;
+		transform: scaleX(1) rotate(0.001deg);
+	}
+
+	[data-hover]:hover [data-underline-link='alt']::before,
+	[data-underline-link='alt']:hover::before {
+		transform-origin: right;
+		transform: scaleX(0) rotate(0.001deg);
+		transition-delay: 0s;
+	}
+
+	[data-hover]:hover [data-underline-link='alt']::after,
+	[data-underline-link='alt']:hover::after {
+		transform-origin: left;
+		transform: scaleX(1) rotate(0.001deg);
+		transition-delay: 0.3s;
 	}
 }

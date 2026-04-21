@@ -22,7 +22,7 @@
 	{/if}
 
 	{#if data.slides.length}
-		<div class="flex min-h-0 min-w-0 flex-1 flex-col justify-center">
+		<div class="flex min-h-0 min-w-0 flex-1 flex-col">
 			<CascadingSlider
 				slides={data.slides}
 				ariaLabel={data.clientsPage?.carouselLabel}
@@ -30,7 +30,7 @@
 			/>
 		</div>
 	{:else}
-		<p class="rounded border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+		<p class="rounded border border-black bg-white p-4 text-sm text-black">
 			Add work slides in Sanity and assign them to the Clients page carousel.
 		</p>
 	{/if}
