@@ -20,9 +20,9 @@
 .cascading-slider--fit-viewport {
 	display: flex;
 	flex-direction: column;
-	flex: 0 1 auto;
+	flex: 0 0 auto;
 	width: 100%;
-	min-height: 0;
+	min-height: min-content;
 }
 
 .cascading-slider__collection {
@@ -191,6 +191,7 @@
 }
 
 .cascading-slider__nav {
+	flex: 0 0 auto;
 	flex-flow: row;
 	justify-content: center;
 	align-items: center;
@@ -200,6 +201,7 @@
 	margin-right: auto;
 	display: flex;
 	position: relative;
+	min-height: min-content;
 }
 
 .cascading-slider__button {
@@ -215,8 +217,9 @@
 	align-items: center;
 	width: auto;
 	height: auto;
-	min-height: 0;
-	padding: 0.125rem;
+	min-width: 1.75rem;
+	min-height: 1.75rem;
+	padding: 0.25rem;
 	display: flex;
 	cursor: pointer;
 	line-height: 0;

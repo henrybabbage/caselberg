@@ -13,7 +13,9 @@
 	<title>Caselberg Studio</title>
 </svelte:head>
 
-<div class="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col overflow-hidden pt-4">
+<div
+	class="mx-auto flex w-full min-h-full max-w-6xl flex-col justify-start pt-4"
+>
 	<h1 class="sr-only">Clients</h1>
 	{#if data.clientsPage?.intro?.length}
 		<div class="mb-4 shrink-0">
