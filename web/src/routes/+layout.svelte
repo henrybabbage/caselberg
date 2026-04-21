@@ -4,7 +4,6 @@
 	import { page } from '$app/state'
 	import { env } from '$env/dynamic/public'
 	import type { SanityImageSource } from '@sanity/image-url'
-	import favicon from '$lib/assets/favicon.svg?url'
 	import SiteFooter from '$lib/components/site-footer.svelte'
 	import SiteHeader from '$lib/components/site-header.svelte'
 	import { urlForImage } from '$lib/image-url'
@@ -81,7 +80,8 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} type="image/svg+xml" />
+	<link rel="icon" href="/favicon.png" type="image/png" />
+	<link rel="apple-touch-icon" href="/favicon.png" />
 	<link rel="canonical" href={pageUrl} />
 	<meta property="og:url" content={pageUrl} />
 	<meta name="twitter:card" content={twitterCard} />
