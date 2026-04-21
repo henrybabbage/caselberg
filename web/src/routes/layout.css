@@ -112,8 +112,8 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	::view-transition-old(root),
-	::view-transition-new(root) {
+	::view-transition-old(page-content),
+	::view-transition-new(page-content) {
 		animation: none;
 	}
 }
