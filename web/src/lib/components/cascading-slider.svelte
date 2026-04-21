@@ -15,16 +15,30 @@
 
 	let wrap: HTMLDivElement | undefined = $state();
 	let navPress: 'prev' | 'next' | null = $state(null);
+	let releaseWindowNavListeners: (() => void) | null = null;
 
 	function clearNavPress() {
 		navPress = null;
+		releaseWindowNavListeners?.();
 	}
 
 	/** pointerup may target outside the button; :active is too short to see. */
 	function handleNavPointerDown(which: 'prev' | 'next') {
+		releaseWindowNavListeners?.();
 		navPress = which;
-		window.addEventListener('pointerup', clearNavPress, { once: true });
-		window.addEventListener('pointercancel', clearNavPress, { once: true });
+		const ac = new AbortController();
+		const { signal } = ac;
+		releaseWindowNavListeners = () => {
+			ac.abort();
+			releaseWindowNavListeners = null;
+		};
+		const onEnd = () => {
+			navPress = null;
+			releaseWindowNavListeners = null;
+			ac.abort();
+		};
+		window.addEventListener('pointerup', onEnd, { once: true, signal });
+		window.addEventListener('pointercancel', onEnd, { once: true, signal });
 	}
 
 	$effect(() => {
