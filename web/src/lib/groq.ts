@@ -24,6 +24,7 @@ export const clientsPageQuery = `*[_type == "clientsPage" && _id == "clientsPage
     image,
     imageMobile,
     imageTablet,
+    imageObjectPosition,
     projectUrl
   }
 }`;

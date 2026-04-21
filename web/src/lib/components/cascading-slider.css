@@ -16,8 +16,23 @@
 	padding-bottom: env(safe-area-inset-bottom, 1em);
 }
 
+/** Clients: fill main’s flex height so caption + nav stay in view (not 100dvh math). */
+.cascading-slider--fit-viewport {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
 .cascading-slider__collection {
 	width: 100%;
+}
+
+.cascading-slider--fit-viewport .cascading-slider__collection {
+	flex: 1 1 auto;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
 }
 
 .cascading-slider__list {
@@ -27,9 +42,26 @@
 	overflow: hidden;
 }
 
-/** Clients: keep slide stack within viewport so the page does not scroll */
 .cascading-slider--fit-viewport .cascading-slider__list {
-	height: min(35em, max(12rem, calc(100dvh - 14.5rem)));
+	flex: 1 1 auto;
+	min-height: 12rem;
+	max-height: 35em;
+	height: auto;
+}
+
+@media (max-width: 767px) {
+	.cascading-slider--fit-viewport .cascading-slider__list {
+		min-height: 8rem;
+	}
+
+	.cascading-slider--fit-viewport .cascading-slider__nav {
+		margin-top: 1.25rem;
+	}
+}
+
+.cascading-slider--fit-viewport .cascading-slider__caption,
+.cascading-slider--fit-viewport .cascading-slider__nav {
+	flex-shrink: 0;
 }
 
 .cascading-slider__item {
@@ -171,10 +203,14 @@
 }
 
 .cascading-slider__button {
+	-webkit-tap-highlight-color: transparent;
+	appearance: none;
+	touch-action: manipulation;
 	color: #0a0a0a;
 	background-color: transparent;
 	border: none;
 	border-radius: 2px;
+	box-shadow: none;
 	justify-content: center;
 	align-items: center;
 	width: auto;
@@ -185,24 +221,32 @@
 	cursor: pointer;
 	line-height: 0;
 	outline: none;
+	transition: opacity 0.15s ease;
+}
+
+.cascading-slider__button:hover,
+.cascading-slider__button:active {
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+.cascading-slider__button:focus:not(:focus-visible) {
+	outline: none;
+	box-shadow: none;
 }
 
 .cascading-slider__button:hover {
-	background-color: transparent;
 	opacity: 0.72;
-	outline: none;
 }
 
-.cascading-slider__button:focus {
-	outline: none;
-}
-
-.cascading-slider__button:active {
-	outline: none;
+.cascading-slider__button:active .cascading-slider__button-icon {
+	transform: scale(0.96);
 }
 
 .cascading-slider__button:focus-visible {
-	outline: none;
+	outline: 2px solid #0a0a0a;
+	outline-offset: 3px;
 }
 
 .cascading-slider__button-icon {
@@ -211,6 +255,15 @@
 	height: 0.9375rem;
 	object-fit: contain;
 	pointer-events: none;
+	transform: scale(1);
+	transform-origin: center;
+	transition: transform 0.15s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cascading-slider__button-icon {
+		transition-duration: 0.01ms;
+	}
 }
 
 @media (min-width: 768px) {

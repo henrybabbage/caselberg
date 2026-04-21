@@ -44,6 +44,22 @@ export const clientType = defineType({
 			options: { hotspot: true }
 		}),
 		defineField({
+			name: 'imageObjectPosition',
+			title: 'Image crop focus',
+			type: 'string',
+			description:
+				'How the main carousel image is cropped (object-fit: cover). Default: center.',
+			initialValue: '',
+			options: {
+				list: [
+					{ title: 'Center', value: '' },
+					{ title: 'Top', value: 'top' },
+					{ title: 'Bottom', value: 'bottom' }
+				],
+				layout: 'radio'
+			}
+		}),
+		defineField({
 			name: 'projectUrl',
 			title: 'Project URL (optional)',
 			type: 'url'
