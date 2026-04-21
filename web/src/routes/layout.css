@@ -89,51 +89,37 @@ a {
 
 ::view-transition-old(page-content),
 ::view-transition-new(page-content) {
-	animation-duration: 1.5s;
-	animation-timing-function: cubic-bezier(0.87, 0, 0.13, 1);
+	animation-duration: 0.55s;
+	animation-timing-function: ease;
 	animation-fill-mode: both;
-	transform-style: preserve-3d;
-	backface-visibility: hidden;
-	transform-origin: 50% 50%;
-	will-change: transform, opacity, filter;
-	--vt-shift-y: clamp(48px, 8vh, 120px);
+	will-change: opacity;
 }
 
 ::view-transition-old(page-content) {
-	animation-name: layout-view-transition-move-out;
+	animation-name: layout-view-transition-fade-out;
 }
 
 ::view-transition-new(page-content) {
-	animation-name: layout-view-transition-move-in;
+	animation-name: layout-view-transition-fade-in;
 }
 
-@keyframes layout-view-transition-move-out {
+@keyframes layout-view-transition-fade-out {
 	from {
 		opacity: 1;
-		filter: blur(0px);
-		transform: perspective(1400px) translateY(0) translateZ(0) scale(1);
 	}
 
 	to {
 		opacity: 0;
-		filter: blur(10px);
-		transform: perspective(1400px) translateY(calc(var(--vt-shift-y) * -1))
-			translateZ(-200px) scale(0.94);
 	}
 }
 
-@keyframes layout-view-transition-move-in {
+@keyframes layout-view-transition-fade-in {
 	from {
 		opacity: 0;
-		filter: blur(10px);
-		transform: perspective(1400px) translateY(var(--vt-shift-y)) translateZ(260px)
-			scale(1.02);
 	}
 
 	to {
 		opacity: 1;
-		filter: blur(0px);
-		transform: perspective(1400px) translateY(0) translateZ(0) scale(1);
 	}
 }
 
