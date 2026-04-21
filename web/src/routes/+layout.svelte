@@ -3,11 +3,15 @@
 	import { onNavigate } from '$app/navigation'
 	import { page } from '$app/state'
 	import { env } from '$env/dynamic/public'
-	import favicon from '$lib/assets/favicon.svg'
+	import type { SanityImageSource } from '@sanity/image-url'
+	import favicon from '$lib/assets/favicon.svg?url'
 	import SiteFooter from '$lib/components/site-footer.svelte'
 	import SiteHeader from '$lib/components/site-header.svelte'
+	import { urlForImage } from '$lib/image-url'
 	import type { NavigationItem, SiteSettings } from '$lib/types/sanity'
 	import './layout.css'
+
+	const siteOrigin = 'https://caselbergstudio.com'
 
 	const defaultNav = [
 		{ label: 'Clients', href: '/', isExternal: false },
@@ -42,6 +46,11 @@
 	);
 	const pathname = $derived(page.url.pathname);
 	const isClients = $derived(pathname === '/' || pathname === '/clients');
+	const pageUrl = $derived(new URL(pathname, siteOrigin).href);
+	const defaultOgImageUrl = $derived(
+		urlForImage(data.siteSettings?.defaultOgImage as SanityImageSource | undefined)
+	);
+	const twitterCard = $derived(defaultOgImageUrl ? 'summary_large_image' : 'summary');
 
 	/** Absolute repo root for [sv-agentation](https://github.com/SikandarJODD/sv-agentation) “open in editor”. Set `PUBLIC_AGENTATION_WORKSPACE_ROOT` in `web/.env`. */
 	const agentationWorkspaceRoot = $derived.by((): string | null => {
@@ -71,7 +80,16 @@
 	});
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<link rel="icon" href={favicon} type="image/svg+xml" />
+	<link rel="canonical" href={pageUrl} />
+	<meta property="og:url" content={pageUrl} />
+	<meta name="twitter:card" content={twitterCard} />
+	{#if defaultOgImageUrl}
+		<meta property="og:image" content={defaultOgImageUrl} />
+		<meta name="twitter:image" content={defaultOgImageUrl} />
+	{/if}
+</svelte:head>
 
 <div
 	class="relative font-sans {isClients
