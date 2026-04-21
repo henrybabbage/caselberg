@@ -22,7 +22,7 @@
 	{/if}
 
 	{#if data.slides.length}
-		<div class="flex min-h-0 min-w-0 flex-1 flex-col">
+		<div class="flex min-h-0 min-w-0 flex-1 flex-col justify-center">
 			<CascadingSlider
 				slides={data.slides}
 				ariaLabel={data.clientsPage?.carouselLabel}

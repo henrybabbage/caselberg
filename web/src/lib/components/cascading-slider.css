@@ -16,11 +16,12 @@
 	padding-bottom: env(safe-area-inset-bottom, 1em);
 }
 
-/** Clients: fill main’s flex height so caption + nav stay in view (not 100dvh math). */
+/** Clients: column layout; collection wraps the rail only so caption + nav follow directly below. */
 .cascading-slider--fit-viewport {
 	display: flex;
 	flex-direction: column;
-	flex: 1 1 auto;
+	flex: 0 1 auto;
+	width: 100%;
 	min-height: 0;
 }
 
@@ -29,7 +30,7 @@
 }
 
 .cascading-slider--fit-viewport .cascading-slider__collection {
-	flex: 1 1 auto;
+	flex: 0 0 auto;
 	min-height: 0;
 	display: flex;
 	flex-direction: column;
@@ -43,10 +44,9 @@
 }
 
 .cascading-slider--fit-viewport .cascading-slider__list {
-	flex: 1 1 auto;
+	flex: 0 0 auto;
+	height: min(35em, 65vh);
 	min-height: 12rem;
-	max-height: 35em;
-	height: auto;
 }
 
 @media (max-width: 767px) {
@@ -55,7 +55,7 @@
 	}
 
 	.cascading-slider--fit-viewport .cascading-slider__nav {
-		margin-top: 1.25rem;
+		margin-top: 0.875rem;
 	}
 }
 
@@ -195,7 +195,7 @@
 	justify-content: center;
 	align-items: center;
 	gap: 1.75rem;
-	margin-top: 2rem;
+	margin-top: 1.125rem;
 	margin-left: auto;
 	margin-right: auto;
 	display: flex;
