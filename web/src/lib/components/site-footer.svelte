@@ -43,7 +43,7 @@
 </script>
 
 <footer
-	class="pointer-events-none fixed inset-x-0 bottom-0 z-20 flex items-end justify-between px-5 pb-6 sm:px-8 sm:pb-8"
+	class="pointer-events-none fixed inset-x-0 bottom-0 z-10 flex items-end justify-between px-5 pb-6 sm:px-8 sm:pb-8"
 >
 	<p class="font-sans text-[10px] font-normal leading-none tracking-[0.04em] text-[#0a0a0a]">
 		© {year}

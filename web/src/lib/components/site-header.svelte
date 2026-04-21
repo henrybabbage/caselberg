@@ -65,7 +65,7 @@
 	data-navigation-status={navStatus}
 >
 	<header
-		class="pointer-events-none fixed inset-x-0 top-0 z-20 flex shrink-0 items-center justify-between px-5 pt-6 sm:px-8 sm:pt-8"
+		class="pointer-events-none fixed inset-x-0 top-0 z-40 flex shrink-0 items-center justify-between px-5 pt-6 sm:px-8 sm:pt-8"
 	>
 		<a
 			href="/"

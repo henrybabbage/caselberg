@@ -79,10 +79,10 @@
 		: 'min-h-screen'}"
 >
 	<SiteHeader {siteName} logoUrl={data.logoUrl} {navigation} {pathname} />
-	<main
+		<main
 		style="view-transition-name: page-content"
 		class="{isClients
-			? 'flex min-h-0 flex-1 flex-col overflow-hidden px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24'
+			? 'relative z-30 flex min-h-0 flex-1 flex-col overflow-hidden px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24'
 			: 'min-h-screen px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-24'}"
 	>
 		{@render children()}

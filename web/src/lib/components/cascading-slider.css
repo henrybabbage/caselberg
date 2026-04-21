@@ -221,7 +221,11 @@
 	cursor: pointer;
 	line-height: 0;
 	outline: none;
-	transition: opacity 0.15s ease;
+	transform: scale(1);
+	transform-origin: center;
+	transition:
+		opacity 0.15s ease,
+		transform 0.1s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .cascading-slider__button:hover,
@@ -240,8 +244,12 @@
 	opacity: 0.72;
 }
 
-.cascading-slider__button:active .cascading-slider__button-icon {
-	transform: scale(0.96);
+.cascading-slider__button:active,
+.cascading-slider__button--pressed {
+	transform: scale(0.86);
+	transition:
+		opacity 0.15s ease,
+		transform 0.05s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .cascading-slider__button:focus-visible {
@@ -261,6 +269,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.cascading-slider__button {
+		transition: opacity 0.15s ease;
+	}
+
+	.cascading-slider__button:active,
+	.cascading-slider__button--pressed {
+		transform: none;
+	}
+
 	.cascading-slider__button-icon {
 		transition-duration: 0.01ms;
 	}

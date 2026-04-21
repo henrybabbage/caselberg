@@ -14,6 +14,18 @@
 	let { slides, ariaLabel = 'Featured work', fitViewport = false }: Props = $props();
 
 	let wrap: HTMLDivElement | undefined = $state();
+	let navPress: 'prev' | 'next' | null = $state(null);
+
+	function clearNavPress() {
+		navPress = null;
+	}
+
+	/** pointerup may target outside the button; :active is too short to see. */
+	function handleNavPointerDown(which: 'prev' | 'next') {
+		navPress = which;
+		window.addEventListener('pointerup', clearNavPress, { once: true });
+		window.addEventListener('pointercancel', clearNavPress, { once: true });
+	}
 
 	$effect(() => {
 		if (!wrap || slides.length === 0) return;
@@ -94,6 +106,11 @@
 				data-cascading-slider-prev
 				aria-label="Previous slide"
 				class="cascading-slider__button cascading-slider__button--prev"
+				class:cascading-slider__button--pressed={navPress === 'prev'}
+				onpointerdown={() => {
+					handleNavPointerDown('prev');
+				}}
+				onpointerleave={clearNavPress}
 			>
 				<img
 					src="/carousel/arrow-left.svg"
@@ -109,6 +126,11 @@
 				data-cascading-slider-next
 				aria-label="Next slide"
 				class="cascading-slider__button cascading-slider__button--next"
+				class:cascading-slider__button--pressed={navPress === 'next'}
+				onpointerdown={() => {
+					handleNavPointerDown('next');
+				}}
+				onpointerleave={clearNavPress}
 			>
 				<img
 					src="/carousel/arrow-right.svg"
