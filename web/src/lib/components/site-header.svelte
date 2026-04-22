@@ -65,6 +65,7 @@
 	data-navigation-status={navStatus}
 >
 	<header
+		style:view-transition-name="site-header"
 		class="pointer-events-none fixed inset-x-0 top-0 z-40 flex shrink-0 items-center justify-between px-5 pt-6 sm:px-8 sm:pt-8"
 	>
 		<a
@@ -137,7 +138,8 @@
 	.bold-nav-full__tile {
 		pointer-events: none;
 		background-color: #fff;
-		z-index: 10;
+		z-index: 35;
+		view-transition-name: mobile-nav;
 		flex-flow: column;
 		justify-content: center;
 		align-items: center;

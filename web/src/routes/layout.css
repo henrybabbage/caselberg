@@ -87,6 +87,17 @@ a {
 	color: inherit;
 }
 
+/* Named view-transition paint order beats fixed z-index; keep nav above main. */
+::view-transition-group(page-content) {
+	z-index: 1;
+}
+::view-transition-group(mobile-nav) {
+	z-index: 50;
+}
+::view-transition-group(site-header) {
+	z-index: 60;
+}
+
 ::view-transition-old(page-content),
 ::view-transition-new(page-content) {
 	animation-duration: 0.55s;
