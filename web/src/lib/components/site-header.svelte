@@ -137,7 +137,7 @@
 	.bold-nav-full__tile {
 		pointer-events: none;
 		background-color: #fff;
-		z-index: 10;
+		z-index: 35;
 		flex-flow: column;
 		justify-content: center;
 		align-items: center;
