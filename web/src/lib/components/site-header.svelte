@@ -65,6 +65,7 @@
 	data-navigation-status={navStatus}
 >
 	<header
+		style:view-transition-name="site-header"
 		class="pointer-events-none fixed inset-x-0 top-0 z-40 flex shrink-0 items-center justify-between px-5 pt-6 sm:px-8 sm:pt-8"
 	>
 		<a
@@ -111,7 +112,12 @@
 			{/each}
 		</nav>
 	</header>
-	<div class="bold-nav-full__tile" aria-hidden={!menuOpen} inert={!menuOpen}>
+	<div
+		class="bold-nav-full__tile"
+		style:view-transition-name={menuOpen ? 'mobile-nav' : 'none'}
+		aria-hidden={!menuOpen}
+		inert={!menuOpen}
+	>
 		<ul class="bold-nav-full__ul" id={mobileNavId}>
 			{#each navigation as item, i (item.href + item.label)}
 				<li class="bold-nav-full__li" style="--nav-i: {i};">
