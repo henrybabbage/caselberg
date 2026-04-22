@@ -112,12 +112,7 @@
 			{/each}
 		</nav>
 	</header>
-	<div
-		class="bold-nav-full__tile"
-		style:view-transition-name={menuOpen ? 'mobile-nav' : 'none'}
-		aria-hidden={!menuOpen}
-		inert={!menuOpen}
-	>
+	<div class="bold-nav-full__tile" aria-hidden={!menuOpen} inert={!menuOpen}>
 		<ul class="bold-nav-full__ul" id={mobileNavId}>
 			{#each navigation as item, i (item.href + item.label)}
 				<li class="bold-nav-full__li" style="--nav-i: {i};">
@@ -144,6 +139,7 @@
 		pointer-events: none;
 		background-color: #fff;
 		z-index: 35;
+		view-transition-name: mobile-nav;
 		flex-flow: column;
 		justify-content: center;
 		align-items: center;
