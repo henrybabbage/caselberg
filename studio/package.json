@@ -4,6 +4,7 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
+		"postinstall": "patch-package",
 		"dev": "sanity dev",
 		"start": "sanity start",
 		"build": "sanity build",
@@ -12,7 +13,8 @@
 		"scrape-import": "node --env-file=.env scripts/scrape-and-import.mjs"
 	},
 	"dependencies": {
-		"@sanity/vision": "^3.68.3",
+		"@sanity/vision": "3.99.0",
+		"patch-package": "^8.0.1",
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",
 		"sanity": "^3.68.3",

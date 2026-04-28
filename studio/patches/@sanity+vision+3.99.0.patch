@@ -1,0 +1,26 @@
+diff --git a/node_modules/@sanity/vision/lib/_chunks-cjs/SanityVision.js b/node_modules/@sanity/vision/lib/_chunks-cjs/SanityVision.js
+index 4172238..50e5d40 100644
+--- a/node_modules/@sanity/vision/lib/_chunks-cjs/SanityVision.js
++++ b/node_modules/@sanity/vision/lib/_chunks-cjs/SanityVision.js
+@@ -813,7 +813,7 @@ function QueryRecall(t0) {
+             tone: "default"
+           } })
+         ] }),
+-        /* @__PURE__ */ jsxRuntime.jsx(ui.Code, { muted: !0, children: queryObj?.query.split("{")[0] }),
++        /* @__PURE__ */ jsxRuntime.jsx(ui.Code, { muted: !0, children: queryObj?.query?.split("{")?.[0] }),
+         /* @__PURE__ */ jsxRuntime.jsx(ui.Flex, { align: "center", gap: 1, children: /* @__PURE__ */ jsxRuntime.jsx(ui.Text, { size: 1, muted: !0, children: formatDate.format(new Date(q_4.savedAt || "")) }) }),
+         isEdited && /* @__PURE__ */ jsxRuntime.jsx(ui.Button, { mode: "ghost", tone: "default", size: 1, padding: 2, style: {
+           height: "24px",
+diff --git a/node_modules/@sanity/vision/lib/_chunks-es/SanityVision.mjs b/node_modules/@sanity/vision/lib/_chunks-es/SanityVision.mjs
+index 598f99f..294a84c 100644
+--- a/node_modules/@sanity/vision/lib/_chunks-es/SanityVision.mjs
++++ b/node_modules/@sanity/vision/lib/_chunks-es/SanityVision.mjs
+@@ -838,7 +838,7 @@ function QueryRecall(t0) {
+             tone: "default"
+           } })
+         ] }),
+-        /* @__PURE__ */ jsx(Code, { muted: !0, children: queryObj?.query.split("{")[0] }),
++        /* @__PURE__ */ jsx(Code, { muted: !0, children: queryObj?.query?.split("{")?.[0] }),
+         /* @__PURE__ */ jsx(Flex, { align: "center", gap: 1, children: /* @__PURE__ */ jsx(Text, { size: 1, muted: !0, children: formatDate.format(new Date(q_4.savedAt || "")) }) }),
+         isEdited && /* @__PURE__ */ jsx(Button, { mode: "ghost", tone: "default", size: 1, padding: 2, style: {
+           height: "24px",
