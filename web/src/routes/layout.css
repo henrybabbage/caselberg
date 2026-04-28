@@ -2,7 +2,7 @@
 
 @font-face {
 	font-family: 'Neue Haas Unica';
-	src: url('/fonts/NeueHaasUnica-Regular.woff2') format('woff2');
+	src: url('/fonts/NeueHaasUnica/NeueHaasUnica-Regular.woff2') format('woff2');
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
@@ -10,7 +10,7 @@
 
 @font-face {
 	font-family: 'Neue Haas Unica';
-	src: url('/fonts/NeueHaasUnica-Italic.woff2') format('woff2');
+	src: url('/fonts/NeueHaasUnica/NeueHaasUnica-Italic.woff2') format('woff2');
 	font-weight: 400;
 	font-style: italic;
 	font-display: swap;
@@ -49,6 +49,15 @@
 	font-display: swap;
 }
 
+/** Static optical cut for /about body copy (file: ExposureTrial[-30].otf). */
+@font-face {
+	font-family: 'Exposure Trial [-30]';
+	src: url('/fonts/Exposure/ExposureTrial%5B-30%5D.otf') format('opentype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
 @theme {
 	--font-sans: 'Neue Haas Unica', system-ui, sans-serif;
 	--font-exposure: 'Exposure VAR', ui-serif, Georgia, 'Times New Roman', serif;
@@ -73,10 +82,10 @@ html.clients-no-scroll body {
 	overscroll-behavior: none;
 }
 
-/** About: Portable Text uses Exposure Trial (see @font-face). */
+/** About: Portable Text uses static Exposure Trial [-30] (see @font-face). */
 .about-main-text {
-	font-family: var(--font-exposure-trial);
-	font-weight: 300;
+	font-family: 'Exposure Trial [-30]', var(--font-exposure-trial);
+	font-weight: 400;
 }
 
 .about-main-text :where(p, h1, h2, h3, h4, h5, h6, blockquote, li, a, strong, em, span) {
