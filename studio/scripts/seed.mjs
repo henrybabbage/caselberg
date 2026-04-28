@@ -93,6 +93,7 @@ const documents = [
 	{
 		_id: 'contactPage',
 		_type: 'contactPage',
+		title: 'Contact',
 		heading: 'Caselberg Studio',
 		email: 'isabella@caselbergstudio.com',
 		emailDisplay: 'isabella@caselbergstudio.com',

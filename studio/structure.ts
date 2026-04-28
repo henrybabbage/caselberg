@@ -1,8 +1,8 @@
 import {
+	AsteriskIcon,
 	CogIcon,
 	EnvelopeIcon,
 	HomeIcon,
-	InfoOutlineIcon,
 	PresentationIcon,
 	UsersIcon
 } from '@sanity/icons';
@@ -55,7 +55,7 @@ export const structure: StructureResolver = (S) =>
 				'aboutPage',
 				'About',
 				singletonIds.aboutPage,
-				InfoOutlineIcon
+				AsteriskIcon
 			),
 			singletonListItem(
 				S,

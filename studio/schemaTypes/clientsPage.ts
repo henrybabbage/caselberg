@@ -8,13 +8,15 @@ export const clientsPageType = defineType({
 		defineField({
 			name: 'title',
 			title: 'Title',
-			type: 'string'
+			type: 'string',
+			readOnly: true
 		}),
 		defineField({
 			name: 'carouselLabel',
 			title: 'Carousel aria-label',
 			type: 'string',
-			initialValue: 'Featured work'
+			initialValue: 'Featured work',
+			hidden: true
 		}),
 		defineField({
 			name: 'carouselSlides',

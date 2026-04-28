@@ -91,6 +91,7 @@ const ABOUT_COPY =
 	'At the intersection of creativity and innovation, Caselberg Studio uses an integrated approach to ensure creative excellence and business strategy work in harmony.';
 
 const CONTACT = {
+	title: 'Contact',
 	heading: 'Caselberg Studio',
 	email: 'isabella@caselbergstudio.com',
 	emailDisplay: 'isabella@caselbergstudio.com',

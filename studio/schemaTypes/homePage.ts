@@ -9,7 +9,9 @@ export const homePageType = defineType({
 			name: 'title',
 			title: 'Title',
 			type: 'string',
-			description: 'Optional. Leave empty for a minimal home; used in the browser tab title when set.'
+			readOnly: true,
+			description:
+				'Optional. Leave empty for a minimal home; used in the browser tab title when set. Read-only in Studio.'
 		})
 	]
 });

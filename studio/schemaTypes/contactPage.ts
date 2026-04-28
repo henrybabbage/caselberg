@@ -6,6 +6,14 @@ export const contactPageType = defineType({
 	type: 'document',
 	fields: [
 		defineField({
+			name: 'title',
+			title: 'Title',
+			type: 'string',
+			initialValue: 'Contact',
+			readOnly: true,
+			description: 'Page label for navigation and metadata. Read-only in Studio.'
+		}),
+		defineField({
 			name: 'heading',
 			title: 'Contact block heading',
 			type: 'string',
