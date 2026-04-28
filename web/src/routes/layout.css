@@ -18,7 +18,7 @@
 
 @font-face {
 	font-family: 'Exposure VAR';
-	src: url('/fonts/ExposureVAR.woff2') format('woff2');
+	src: url('/fonts/ExposureVAR.ttf') format('truetype');
 	font-weight: 100 900;
 	font-style: normal;
 	font-display: swap;
@@ -26,7 +26,7 @@
 
 @font-face {
 	font-family: 'Exposure VAR';
-	src: url('/fonts/ExposureVAR-Italic.woff2') format('woff2');
+	src: url('/fonts/ExposureVAR-Italic.ttf') format('truetype');
 	font-weight: 100 900;
 	font-style: italic;
 	font-display: swap;
@@ -35,7 +35,7 @@
 /** Same files as Exposure VAR; use this family name where design specifies “Exposure Trial”. */
 @font-face {
 	font-family: 'Exposure Trial';
-	src: url('/fonts/ExposureVAR.woff2') format('woff2');
+	src: url('/fonts/ExposureVAR.ttf') format('truetype');
 	font-weight: 100 900;
 	font-style: normal;
 	font-display: swap;
@@ -43,7 +43,7 @@
 
 @font-face {
 	font-family: 'Exposure Trial';
-	src: url('/fonts/ExposureVAR-Italic.woff2') format('woff2');
+	src: url('/fonts/ExposureVAR-Italic.ttf') format('truetype');
 	font-weight: 100 900;
 	font-style: italic;
 	font-display: swap;
