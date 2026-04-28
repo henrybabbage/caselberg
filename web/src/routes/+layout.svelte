@@ -11,6 +11,7 @@
 	import './layout.css'
 
 	const siteOrigin = 'https://caselbergstudio.com'
+	const staticOgImageUrl = new URL('/open-graph-1.png', siteOrigin).href
 
 	const defaultNav = [
 		{ label: 'Clients', href: '/', isExternal: false },
@@ -47,9 +48,10 @@
 	const isClients = $derived(pathname === '/' || pathname === '/clients');
 	const pageUrl = $derived(new URL(pathname, siteOrigin).href);
 	const defaultOgImageUrl = $derived(
-		urlForImage(data.siteSettings?.defaultOgImage as SanityImageSource | undefined)
+		urlForImage(data.siteSettings?.defaultOgImage as SanityImageSource | undefined) ??
+			staticOgImageUrl
 	);
-	const twitterCard = $derived(defaultOgImageUrl ? 'summary_large_image' : 'summary');
+	const twitterCard = $derived('summary_large_image');
 
 	/** Absolute repo root for [sv-agentation](https://github.com/SikandarJODD/sv-agentation) “open in editor”. Set `PUBLIC_AGENTATION_WORKSPACE_ROOT` in `web/.env`. */
 	const agentationWorkspaceRoot = $derived.by((): string | null => {
@@ -85,10 +87,8 @@
 	<link rel="canonical" href={pageUrl} />
 	<meta property="og:url" content={pageUrl} />
 	<meta name="twitter:card" content={twitterCard} />
-	{#if defaultOgImageUrl}
-		<meta property="og:image" content={defaultOgImageUrl} />
-		<meta name="twitter:image" content={defaultOgImageUrl} />
-	{/if}
+	<meta property="og:image" content={defaultOgImageUrl} />
+	<meta name="twitter:image" content={defaultOgImageUrl} />
 </svelte:head>
 
 <div
