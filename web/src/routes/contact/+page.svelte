@@ -1,6 +1,5 @@
 <script lang="ts">
 	import ContactBlock from '$lib/components/contact-block.svelte';
-	import PortableText from '$lib/components/portable-text.svelte';
 	import type { ContactPage } from '$lib/types/sanity';
 
 	let { data } = $props<{ data: { contactPage: ContactPage | null } }>();
@@ -16,11 +15,6 @@
 	class="flex min-h-[calc(100svh-12rem)] w-full flex-col items-start justify-center sm:min-h-[calc(100svh-10rem)]"
 >
 	<h1 class="sr-only">Contact</h1>
-	{#if c?.intro?.length}
-		<div class="mb-12 w-full max-w-lg">
-			<PortableText value={c?.intro} />
-		</div>
-	{/if}
 
 	{#if c?.heading && c.email && c.instagramUrl && c.instagramHandle && c.phoneTel && c.phoneDisplay}
 		<div class="w-full max-w-lg">

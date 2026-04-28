@@ -8,14 +8,12 @@ export const siteSettingsQuery = `*[_type == "siteSettings" && _id == "siteSetti
 }`;
 
 export const homePageQuery = `*[_type == "homePage" && _id == "homePage"][0]{
-  title,
-  subtitle,
-  heroImage
+  title
 }`;
 
 /** Carousel slides: do not append `}[predicate]` directly — GROQ binds it to `image` (subscript). Filter in `mapSlides` instead. */
 export const clientsPageQuery = `*[_type == "clientsPage" && _id == "clientsPage"][0]{
-  intro,
+  title,
   carouselLabel,
   "slides": carouselSlides[]->{
     _id,
@@ -35,7 +33,6 @@ export const aboutPageQuery = `*[_type == "aboutPage" && _id == "aboutPage"][0]{
 }`;
 
 export const contactPageQuery = `*[_type == "contactPage" && _id == "contactPage"][0]{
-  intro,
   heading,
   email,
   emailDisplay,

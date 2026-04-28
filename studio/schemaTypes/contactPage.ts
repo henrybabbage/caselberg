@@ -6,11 +6,6 @@ export const contactPageType = defineType({
 	type: 'document',
 	fields: [
 		defineField({
-			name: 'intro',
-			title: 'Intro (above contact block)',
-			type: 'blockContent'
-		}),
-		defineField({
 			name: 'heading',
 			title: 'Contact block heading',
 			type: 'string',

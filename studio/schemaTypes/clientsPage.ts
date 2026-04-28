@@ -6,9 +6,9 @@ export const clientsPageType = defineType({
 	type: 'document',
 	fields: [
 		defineField({
-			name: 'intro',
-			title: 'Intro',
-			type: 'blockContent'
+			name: 'title',
+			title: 'Title',
+			type: 'string'
 		}),
 		defineField({
 			name: 'carouselLabel',

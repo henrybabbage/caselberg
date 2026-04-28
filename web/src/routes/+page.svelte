@@ -1,6 +1,5 @@
 <script lang="ts">
 	import CascadingSlider from '$lib/components/cascading-slider.svelte';
-	import PortableText from '$lib/components/portable-text.svelte';
 	import type { CascadingSlide } from '$lib/types/cascading';
 	import type { ClientsPage } from '$lib/types/sanity';
 
@@ -16,12 +15,13 @@
 <div
 	class="mx-auto flex w-full min-h-full max-w-6xl flex-col justify-start pt-4"
 >
-	<h1 class="sr-only">Clients</h1>
-	{#if data.clientsPage?.intro?.length}
-		<div class="mb-4 shrink-0">
-			<PortableText value={data.clientsPage?.intro} />
-		</div>
-	{/if}
+	<h1
+		class="{data.clientsPage?.title
+			? 'mb-4 shrink-0 text-[0.8767rem] font-normal text-[#0a0a0a]'
+			: 'sr-only'}"
+	>
+		{data.clientsPage?.title ?? 'Clients'}
+	</h1>
 
 	{#if data.slides.length}
 		<div class="flex min-h-0 min-w-0 flex-1 flex-col justify-center">

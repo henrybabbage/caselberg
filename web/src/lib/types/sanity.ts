@@ -17,8 +17,6 @@ export type SiteSettings = {
 
 export type HomePage = {
 	title?: string;
-	subtitle?: string;
-	heroImage?: unknown;
 };
 
 export type ClientSlide = {
@@ -35,7 +33,7 @@ export type ClientSlide = {
 };
 
 export type ClientsPage = {
-	intro?: PortableTextBlock[];
+	title?: string;
 	carouselLabel?: string;
 	slides?: ClientSlide[];
 };
@@ -46,7 +44,6 @@ export type AboutPage = {
 };
 
 export type ContactPage = {
-	intro?: PortableTextBlock[];
 	heading?: string;
 	email?: string;
 	emailDisplay?: string;

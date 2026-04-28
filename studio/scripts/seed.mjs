@@ -65,6 +65,7 @@ const documents = [
 	{
 		_id: 'clientsPage',
 		_type: 'clientsPage',
+		title: 'Clients',
 		carouselLabel: 'Featured work',
 		carouselSlides: []
 	},
