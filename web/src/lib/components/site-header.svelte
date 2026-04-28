@@ -270,9 +270,9 @@
 		padding-left: 0.075em;
 		padding-right: 0.075em;
 		font-family: var(--font-sans), system-ui, sans-serif;
-		font-size: 14px;
+		font-size: 16px;
 		font-weight: 400;
-		line-height: 1.25;
+		line-height: 1.3;
 		text-decoration: none;
 		transform: translateY(100%) rotate(5deg);
 		transition: transform 0.75s cubic-bezier(0.7, 0, 0.3, 1);
