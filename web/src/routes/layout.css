@@ -76,7 +76,7 @@ html.clients-no-scroll body {
 /** About: Portable Text uses Exposure Trial (see @font-face). */
 .about-main-text {
 	font-family: var(--font-exposure-trial);
-	font-weight: 30;
+	font-weight: 300;
 }
 
 .about-main-text :where(p, h1, h2, h3, h4, h5, h6, blockquote, li, a, strong, em, span) {
