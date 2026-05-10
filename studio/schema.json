@@ -929,27 +929,6 @@
         },
         "optional": true
       },
-      "imageObjectPosition": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "union",
-          "of": [
-            {
-              "type": "string",
-              "value": ""
-            },
-            {
-              "type": "string",
-              "value": "top"
-            },
-            {
-              "type": "string",
-              "value": "bottom"
-            }
-          ]
-        },
-        "optional": true
-      },
       "projectUrl": {
         "type": "objectAttribute",
         "value": {

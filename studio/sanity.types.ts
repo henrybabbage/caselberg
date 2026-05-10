@@ -172,7 +172,6 @@ export type Client = {
     crop?: SanityImageCrop;
     _type: "image";
   };
-  imageObjectPosition?: "" | "top" | "bottom";
   projectUrl?: string;
 };
 

@@ -85,9 +85,6 @@
 											loading="eager"
 											draggable="false"
 											class="cascading-slider__img"
-											style={slide.imageObjectPosition
-												? `object-position: ${slide.imageObjectPosition}`
-												: undefined}
 										/>
 									</picture>
 								{:else}
@@ -97,9 +94,6 @@
 										loading="eager"
 										draggable="false"
 										class="cascading-slider__img"
-										style={slide.imageObjectPosition
-											? `object-position: ${slide.imageObjectPosition}`
-											: undefined}
 									/>
 								{/if}
 							</div>

@@ -27,8 +27,6 @@ export type ClientSlide = {
 	image?: unknown;
 	imageMobile?: unknown;
 	imageTablet?: unknown;
-	/** CSS object-position for main image (e.g. top, bottom) */
-	imageObjectPosition?: string;
 	projectUrl?: string;
 };
 
