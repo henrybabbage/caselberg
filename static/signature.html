@@ -176,26 +176,45 @@
   function copySignature() {
     const btn = document.getElementById('copyBtn');
 
-    const blob = new Blob([signatureHTML], { type: 'text/html' });
-    const item = new ClipboardItem({ 'text/html': blob });
-
-    navigator.clipboard.write([item]).then(() => {
+    function markCopied() {
       btn.textContent = 'Copied ✓';
       btn.classList.add('copied');
       setTimeout(() => {
         btn.textContent = 'Copy Signature';
         btn.classList.remove('copied');
       }, 2500);
-    }).catch(() => {
-      navigator.clipboard.writeText(signatureHTML).then(() => {
-        btn.textContent = 'Copied ✓';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = 'Copy Signature';
-          btn.classList.remove('copied');
-        }, 2500);
-      });
-    });
+    }
+
+    function execCommandFallback() {
+      const el = document.createElement('div');
+      el.innerHTML = signatureHTML;
+      el.style.cssText = 'position:fixed;top:0;left:-9999px;opacity:0;pointer-events:none;';
+      document.body.appendChild(el);
+
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+
+      try {
+        document.execCommand('copy');
+        markCopied();
+      } catch (e) {
+        btn.textContent = 'Copy failed – try manually';
+      }
+
+      sel.removeAllRanges();
+      document.body.removeChild(el);
+    }
+
+    if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+      const blob = new Blob([signatureHTML], { type: 'text/html' });
+      const item = new ClipboardItem({ 'text/html': blob });
+      navigator.clipboard.write([item]).then(markCopied).catch(execCommandFallback);
+    } else {
+      execCommandFallback();
+    }
   }
 </script>
 
