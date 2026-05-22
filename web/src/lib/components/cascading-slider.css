@@ -4,7 +4,7 @@
 
 [data-cascading-slide] {
 	--clip: 0;
-	--radius: 2px;
+	--radius: 1px;
 }
 
 .cascading-slider {
