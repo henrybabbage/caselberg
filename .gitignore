@@ -19,3 +19,9 @@ studio/.sanity
 
 # Playwright / docs output
 /docs/screenshots
+
+# Claude
+CLAUDE.md
+
+# Agents
+AGENTS.md
