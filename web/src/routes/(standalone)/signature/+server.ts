@@ -1,8 +1,16 @@
-<svelte:head>
+export function GET() {
+	const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Email Signature — Isabella Caselberg</title>
-</svelte:head>
-
-<div style="padding: 32px;">
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		body { padding: 32px; background: #ffffff; }
+	</style>
+</head>
+<body>
 	<table cellpadding="0" cellspacing="0" border="0"
 		style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.4; color: #111111;">
 		<tbody>
@@ -28,4 +36,10 @@
 			</tr>
 		</tbody>
 	</table>
-</div>
+</body>
+</html>`;
+
+	return new Response(html, {
+		headers: { 'Content-Type': 'text/html' }
+	});
+}
