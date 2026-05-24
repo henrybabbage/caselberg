@@ -6,5 +6,8 @@ export default defineCliConfig({
 		dataset: 'production'
 	},
 	/** Hosted Studio URL: https://<studioHost>.sanity.studio — set once; change only if hostname is unavailable. */
-	studioHost: 'caselbergstudio'
+	studioHost: 'caselbergstudio',
+	deployment: {
+		appId: 'msii2q2g1wae1hpbklgput3z'
+	}
 });
