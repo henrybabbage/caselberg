@@ -6,5 +6,5 @@ export default defineCliConfig({
 		dataset: 'production'
 	},
 	/** Hosted Studio URL: https://<studioHost>.sanity.studio — set once; change only if hostname is unavailable. */
-	studioHost: 'caselberg-studio'
+	studioHost: 'caselbergstudio'
 });
