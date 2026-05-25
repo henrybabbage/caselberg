@@ -59,14 +59,6 @@
 		return typeof v === 'string' && v.trim().length > 0 ? v.trim() : null;
 	});
 
-	$effect(() => {
-		if (!browser) return;
-		const root = document.documentElement;
-		if (isClients) root.classList.add('clients-no-scroll');
-		else root.classList.remove('clients-no-scroll');
-		return () => root.classList.remove('clients-no-scroll');
-	});
-
 	onNavigate((navigation) => {
 		if (!supportsViewTransitions()) return;
 		if (!navigation.to?.route?.id) return;
@@ -91,17 +83,13 @@
 	<meta name="twitter:image" content={defaultOgImageUrl} />
 </svelte:head>
 
-<div
-	class="relative font-sans {isClients
-		? 'flex h-dvh max-h-dvh flex-col overflow-hidden'
-		: 'min-h-screen md:flex md:h-dvh md:max-h-dvh md:flex-col md:overflow-hidden'}"
->
+<div class="relative font-sans flex h-dvh max-h-dvh flex-col overflow-hidden">
 	<SiteHeader {siteName} logoUrl={data.logoUrl} {navigation} {pathname} />
 	<main
 		style="view-transition-name: page-content"
 		class="{isClients
 			? 'relative z-30 flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24'
-			: 'min-h-screen px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-24 md:flex-1 md:min-h-0 md:overflow-hidden'}"
+			: 'flex-1 min-h-0 overflow-hidden px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-24'}"
 	>
 		{@render children()}
 	</main>

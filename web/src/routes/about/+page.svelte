@@ -14,7 +14,7 @@
 {/if}
 
 <div
-	class="flex w-full min-h-[calc(100vh-12rem)] flex-col items-center justify-center sm:min-h-[calc(100vh-10rem)] md:min-h-0 md:h-full"
+	class="flex h-full w-full flex-col items-center justify-center"
 >
 	<div
 		class="about-main-text w-fit max-w-[72ch] text-left text-[0.8767rem] leading-[1.4] text-[#0a0a0a] [&_p]:m-0 [&_p+p]:mt-4"
