@@ -12,7 +12,7 @@
 </svelte:head>
 
 <div
-	class="flex min-h-[calc(100svh-12rem)] w-full flex-col items-start justify-center sm:min-h-[calc(100svh-10rem)]"
+	class="flex min-h-[calc(100svh-12rem)] w-full flex-col items-start justify-center sm:min-h-[calc(100svh-10rem)] md:min-h-0 md:h-full"
 >
 	<h1 class="sr-only">Contact</h1>
 
