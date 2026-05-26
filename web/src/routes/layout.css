@@ -72,9 +72,9 @@ body {
 	-webkit-font-smoothing: antialiased;
 }
 
-/** Applied on /clients only — locks the shell to the viewport (see +layout.svelte). */
-html.clients-no-scroll,
-html.clients-no-scroll body {
+/** Lock all pages to the viewport — no page-level scroll on any route. */
+html,
+html body {
 	height: 100%;
 	height: 100dvh;
 	max-height: 100dvh;
