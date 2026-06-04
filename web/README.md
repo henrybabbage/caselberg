@@ -1,42 +1,49 @@
-# sv
+# Caselberg Studio web
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+SvelteKit frontend for the Caselberg Studio website. It reads page content, navigation, SEO defaults, logo assets, and carousel slides from Sanity.
 
-## Creating a project
+For full repository setup, Studio details, deployment notes, and CMS content requirements, see the root [`README.md`](../README.md).
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Setup
 
-```sh
-# create a new project
-npx sv create my-app
-```
-
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv@0.14.0 create --template minimal --types ts --add tailwindcss="plugins:none" sveltekit-adapter="adapter:auto" --install npm web
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
+npm install
+cp .env.example .env
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Local site: [http://localhost:5173](http://localhost:5173)
 
-To create a production version of your app:
+## Environment
 
-```sh
-npm run build
+```bash
+PUBLIC_SANITY_PROJECT_ID=w1pg51yy
+PUBLIC_SANITY_DATASET=production
+PUBLIC_SANITY_API_VERSION=2024-01-01
 ```
 
-You can preview the production build with `npm run preview`.
+Optional:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+SANITY_API_READ_TOKEN=...
+PUBLIC_AGENTATION_WORKSPACE_ROOT=/absolute/path/to/caselberg
+```
+
+Use `SANITY_API_READ_TOKEN` only if the Sanity dataset is private. `PUBLIC_AGENTATION_WORKSPACE_ROOT` is a development-only value used by `sv-agentation`.
+
+## Scripts
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the SvelteKit dev server |
+| `npm run build` | Build the production site |
+| `npm run preview` | Preview the production build locally |
+| `npm run check` | Run Svelte and TypeScript checks |
+| `npm run test:e2e` | Run Playwright tests |
+| `npm run test:e2e:reference` | Audit the live reference site |
+
+## Notes
+
+- The home page and `/clients` route use the same Sanity carousel data; `/clients` redirects to `/`.
+- Carousel image URLs are generated from Sanity assets with responsive desktop, narrow, tablet, and mobile sizes.
+- If Sanity is not configured or content is missing, the app renders fallback development messages instead of failing the page load.
