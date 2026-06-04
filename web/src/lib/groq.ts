@@ -19,9 +19,9 @@ export const clientsPageQuery = `*[_type == "clientsPage" && _id == "clientsPage
     _id,
     "name": coalesce(name, title),
     description,
-    image,
-    imageMobile,
-    imageTablet,
+    image{asset,hotspot,crop},
+    imageMobile{asset,hotspot,crop},
+    imageTablet{asset,hotspot,crop},
     projectUrl
   }
 }`;

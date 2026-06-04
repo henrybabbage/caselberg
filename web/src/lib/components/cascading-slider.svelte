@@ -71,13 +71,16 @@
 					>
 						<div class="cascading-slider__item-inner">
 							<div class="cascading-slider__item-bg">
-								{#if slide.srcMobile || slide.srcTablet}
+								{#if slide.srcMobile || slide.srcTablet || slide.srcNarrow}
 									<picture>
 										{#if slide.srcMobile}
 											<source media="(max-width: 479px)" srcset={slide.srcMobile} />
 										{/if}
 										{#if slide.srcTablet}
 											<source media="(max-width: 767px)" srcset={slide.srcTablet} />
+										{/if}
+										{#if slide.srcNarrow}
+											<source media="(max-width: 991px)" srcset={slide.srcNarrow} />
 										{/if}
 										<img
 											src={slide.src}
