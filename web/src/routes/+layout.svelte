@@ -6,6 +6,7 @@
 	import type { SanityImageSource } from '@sanity/image-url'
 	import SiteFooter from '$lib/components/site-footer.svelte'
 	import SiteHeader from '$lib/components/site-header.svelte'
+	import SplashScreen from '$lib/components/splash-screen.svelte'
 	import { urlForImage } from '$lib/image-url'
 	import type { NavigationItem, SiteSettings } from '$lib/types/sanity'
 	import './layout.css'
@@ -95,6 +96,8 @@
 	</main>
 	<SiteFooter {siteName} initialAucklandTime={data.aucklandTime} />
 </div>
+
+<SplashScreen {siteName} />
 
 {#if browser && dev}
 	{#await import('sv-agentation') then mod}
