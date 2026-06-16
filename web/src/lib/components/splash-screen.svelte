@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { onDestroy, onMount, tick } from 'svelte'
-	// Raw markup so each letter <path> can be styled with fill-opacity (an <img> can't be).
+	// Raw markup so the logo can be inlined and clip-revealed (an <img> would also work,
+	// but inlining keeps the fill color in our control).
 	import logoMarkup from '../../../static/logo.svg?raw'
 
 	let { siteName = 'Caselberg Studio' }: { siteName?: string } = $props()
 
 	const STORAGE_KEY = 'caselberg:splash-seen'
-	const FADE_MS = 900
-	const HOLD_AFTER_MS = 900
+	const REVEAL_MS = 1100
+	const HOLD_AFTER_MS = 800
 	const EXIT_MS = 550
 
 	let visible = $state(false)
@@ -36,12 +37,12 @@
 		visible = true
 		await tick()
 
-		// Trigger the fill fade-in on the next frame so the transition runs.
+		// Trigger the top-to-bottom reveal on the next frame so the transition runs.
 		raf = requestAnimationFrame(() => {
 			filled = true
 		})
 
-		holdTimer = setTimeout(dismiss, FADE_MS + HOLD_AFTER_MS)
+		holdTimer = setTimeout(dismiss, REVEAL_MS + HOLD_AFTER_MS)
 	})
 
 	onDestroy(() => {
@@ -83,21 +84,24 @@
 		height: auto;
 	}
 
-	/* Each shape's white fill fades in together — no outlines. */
 	.splash__logo :global(path) {
 		fill: #fff;
-		fill-opacity: 0;
 		stroke: none;
-		transition: fill-opacity 0.9s ease;
 	}
 
-	.splash__logo.filled :global(path) {
-		fill-opacity: 1;
+	/* Reveal the solid white logo top-to-bottom, so each letter fills in gradually. */
+	.splash__logo {
+		clip-path: inset(0 0 100% 0);
+		transition: clip-path 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.splash__logo.filled {
+		clip-path: inset(0 0 0 0);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.splash__logo :global(path) {
-			fill-opacity: 1;
+		.splash__logo {
+			clip-path: none;
 			transition: none;
 		}
 	}

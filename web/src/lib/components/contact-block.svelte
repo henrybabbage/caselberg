@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { stegaClean } from '@sanity/sveltekit';
+
 	type Props = {
 		heading: string;
 		email: string;
@@ -19,7 +21,12 @@
 		phoneDisplay
 	}: Props = $props();
 
-	const telHref = $derived(phoneTel.startsWith('tel:') ? phoneTel : `tel:${phoneTel}`);
+	const cleanEmail = $derived(stegaClean(email));
+	const cleanInstagramUrl = $derived(stegaClean(instagramUrl));
+	const cleanPhoneTel = $derived(stegaClean(phoneTel));
+	const telHref = $derived(
+		cleanPhoneTel.startsWith('tel:') ? cleanPhoneTel : `tel:${cleanPhoneTel}`
+	);
 </script>
 
 <div
@@ -39,7 +46,7 @@
 			<span
 				class="cs-value ml-6 text-[12px] leading-[1.1] max-[640px]:ml-4 [&_a]:text-inherit [&_a]:no-underline [&_a]:[font-size:inherit] [&_a]:[line-height:inherit] hover:[&_a]:underline"
 			>
-				<a href={`mailto:${email}`}>{emailDisplay}</a>
+				<a href={`mailto:${cleanEmail}`}>{emailDisplay}</a>
 			</span>
 		</div>
 		<div class="cs-contact-row inline-flex items-baseline whitespace-nowrap">
@@ -51,7 +58,7 @@
 			<span
 				class="cs-value ml-6 text-[12px] leading-[1.1] max-[640px]:ml-4 [&_a]:text-inherit [&_a]:no-underline [&_a]:[font-size:inherit] [&_a]:[line-height:inherit] hover:[&_a]:underline"
 			>
-				<a href={instagramUrl} target="_blank" rel="noreferrer">{instagramHandle}</a>
+				<a href={cleanInstagramUrl} target="_blank" rel="noreferrer">{instagramHandle}</a>
 			</span>
 		</div>
 		<div class="cs-contact-row inline-flex items-baseline whitespace-nowrap">
