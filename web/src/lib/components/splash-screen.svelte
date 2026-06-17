@@ -11,7 +11,7 @@
 	// Initial extra letter spacing as a fraction of each glyph's distance from the
 	// wordmark centre. The gaps start wider than normal and contract to the resting
 	// positions. GSAP interpolates smoothly, so a clearly visible spread reads well.
-	const SPREAD_FACTOR = 0.08
+	const SPREAD_FACTOR = 0.06
 
 	let visible = $state(false)
 	let splashEl: HTMLDivElement | undefined
