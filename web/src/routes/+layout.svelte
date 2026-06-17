@@ -111,8 +111,6 @@
 	</VisualEditing>
 </PreviewMode>
 
-<SplashScreen {siteName} />
-
 {#if browser && dev}
 	{#await import('sv-agentation') then mod}
 		<mod.Agentation workspaceRoot={agentationWorkspaceRoot} />
