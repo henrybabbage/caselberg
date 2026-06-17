@@ -9,8 +9,9 @@
 
 	const STORAGE_KEY = 'caselberg:splash-seen'
 	// Initial extra letter spacing as a fraction of each glyph's distance from the
-	// wordmark centre. Kept subtle — the letters drift in to their real positions.
-	const SPREAD_FACTOR = 0.05
+	// wordmark centre. The gaps start wider than normal and contract to the resting
+	// positions. GSAP interpolates smoothly, so a clearly visible spread reads well.
+	const SPREAD_FACTOR = 0.08
 
 	let visible = $state(false)
 	let splashEl: HTMLDivElement | undefined
