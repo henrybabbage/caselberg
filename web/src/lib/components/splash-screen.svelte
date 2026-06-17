@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onDestroy, onMount, tick } from 'svelte'
+	import { gsap } from 'gsap'
 	// Raw markup so the logo is inlined and each letter <path> can be transformed
 	// individually (an <img> can't be styled per-shape).
 	import logoMarkup from '../../../static/logo.svg?raw'
@@ -7,34 +8,23 @@
 	let { siteName = 'Caselberg Studio' }: { siteName?: string } = $props()
 
 	const STORAGE_KEY = 'caselberg:splash-seen'
-	const REVEAL_MS = 1100
-	const HOLD_AFTER_MS = 700
-	const EXIT_MS = 550
-	// Duration of the letters gathering from their spread positions to home.
-	const GATHER_MS = 1000
 	// Initial extra letter spacing as a fraction of each glyph's distance from the
-	// wordmark centre. The letters start spread apart and gather to their real
-	// positions while the word fades in.
-	const SPREAD_FACTOR = 0.1
+	// wordmark centre. Kept subtle — the letters drift in to their real positions.
+	const SPREAD_FACTOR = 0.05
 
 	let visible = $state(false)
-	let filled = $state(false)
-	let leaving = $state(false)
+	let splashEl: HTMLDivElement | undefined
 	let logoEl: HTMLDivElement | undefined
 
-	let holdTimer: ReturnType<typeof setTimeout> | undefined
-	let exitTimer: ReturnType<typeof setTimeout> | undefined
+	let ctx: gsap.Context | undefined
 
 	function removeBackdrop() {
 		if (typeof document === 'undefined') return
 		document.getElementById('splash-backdrop')?.remove()
 	}
 
-	function dismiss() {
-		leaving = true
-		exitTimer = setTimeout(() => {
-			visible = false
-		}, EXIT_MS)
+	function unmount() {
+		visible = false
 	}
 
 	onMount(async () => {
@@ -61,53 +51,69 @@
 		visible = true
 		await tick()
 
-		const paths = logoEl ? Array.from(logoEl.querySelectorAll('path')) : []
+		if (!splashEl || !logoEl) return
+		const paths = Array.from(logoEl.querySelectorAll('path'))
 
-		if (reduce) {
-			filled = true
-			removeBackdrop()
-			holdTimer = setTimeout(dismiss, HOLD_AFTER_MS)
-			return
-		}
-
-		// Each glyph's spread offset is based on its real horizontal position, so the
-		// gather reads correctly regardless of the order paths appear in the file.
-		const glyphs = paths.map((p) => {
-			const box = p.getBBox()
-			return { p, center: box.x + box.width / 2 }
-		})
-
-		removeBackdrop()
-		// Fades the whole word in (opacity transition lives on the container div).
-		filled = true
-
-		// Animate the gap from wide to normal. CSS transitions don't animate `transform`
-		// on SVG <path> elements, so drive the gather with the Web Animations API.
-		if (glyphs.length) {
-			const centers = glyphs.map((g) => g.center)
-			const wordCenter = (Math.min(...centers) + Math.max(...centers)) / 2
-			for (const { p, center } of glyphs) {
-				const offset = (center - wordCenter) * SPREAD_FACTOR
-				p.animate(
-					[{ transform: `translateX(${offset}px)` }, { transform: 'translateX(0)' }],
-					{ duration: GATHER_MS, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
-				)
+		// gsap.context tracks every tween created inside it so onDestroy can revert
+		// them and clean up inline styles even if we leave mid-animation.
+		ctx = gsap.context(() => {
+			if (reduce) {
+				gsap.set(logoEl!, { autoAlpha: 1 })
+				removeBackdrop()
+				gsap.to(splashEl!, {
+					autoAlpha: 0,
+					duration: 0.4,
+					delay: 1.2,
+					onComplete: unmount
+				})
+				return
 			}
-		}
 
-		holdTimer = setTimeout(dismiss, REVEAL_MS + HOLD_AFTER_MS)
+			// Spread offset per letter, derived from its real horizontal position so the
+			// gather reads correctly regardless of the order paths appear in the file.
+			const centers = paths.map((p) => {
+				const box = p.getBBox()
+				return box.x + box.width / 2
+			})
+			const wordCenter = (Math.min(...centers) + Math.max(...centers)) / 2
+
+			// Starting state: word hidden, letters spread apart. GSAP drives the transform
+			// every frame (CSS transitions don't animate transform on SVG <path>), giving
+			// smooth sub-pixel motion.
+			gsap.set(logoEl!, { autoAlpha: 0 })
+			gsap.set(paths, { x: (i) => (centers[i] - wordCenter) * SPREAD_FACTOR })
+
+			removeBackdrop()
+
+			gsap
+				.timeline({ onComplete: unmount })
+				// Word fades in.
+				.to(logoEl!, { autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 0)
+				// Letters settle to their resting positions — gentle stagger from the centre.
+				.to(
+					paths,
+					{
+						x: 0,
+						duration: 1.3,
+						ease: 'power3.out',
+						stagger: { amount: 0.2, from: 'center' }
+					},
+					0
+				)
+				// Hold, then fade the whole splash away to reveal the page.
+				.to(splashEl!, { autoAlpha: 0, duration: 0.6, ease: 'power2.inOut' }, '+=0.6')
+		}, splashEl)
 	})
 
 	onDestroy(() => {
-		if (holdTimer) clearTimeout(holdTimer)
-		if (exitTimer) clearTimeout(exitTimer)
+		ctx?.revert()
 	})
 </script>
 
 {#if visible}
-	<div class="splash" class:leaving role="presentation" aria-hidden="true">
+	<div class="splash" bind:this={splashEl} role="presentation" aria-hidden="true">
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-		<div class="splash__logo" class:filled bind:this={logoEl} aria-label={siteName} role="img">
+		<div class="splash__logo" bind:this={logoEl} aria-label={siteName} role="img">
 			{@html logoMarkup}
 		</div>
 	</div>
@@ -122,12 +128,6 @@
 		place-items: center;
 		padding: 1.5rem;
 		background: #d40f0f;
-		opacity: 1;
-		transition: opacity 0.55s ease;
-	}
-
-	.splash.leaving {
-		opacity: 0;
 	}
 
 	.splash__logo :global(svg) {
@@ -138,29 +138,13 @@
 		overflow: visible;
 	}
 
-	/* The whole word fades in together. */
+	/* Hidden until GSAP fades it in, so there's no flash before the timeline runs. */
 	.splash__logo {
 		opacity: 0;
-		transition: opacity 0.9s ease;
 	}
 
-	.splash__logo.filled {
-		opacity: 1;
-	}
-
-	/* The gather (transform) is driven by the Web Animations API in JS, because CSS
-	   transitions don't animate `transform` on SVG <path> elements. */
 	.splash__logo :global(path) {
 		fill: #fff;
 		stroke: none;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.splash__logo,
-		.splash__logo :global(path) {
-			opacity: 1;
-			transform: none;
-			transition: none;
-		}
 	}
 </style>
