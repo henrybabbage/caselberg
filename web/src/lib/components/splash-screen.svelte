@@ -1,24 +1,20 @@
 <script lang="ts">
 	import { onDestroy, onMount, tick } from 'svelte'
-	// Raw markup so we can reach each letter <path> and animate it (an <img> can't be).
+	// Inline the logo markup so its paths inherit the white fill from CSS.
 	import logoMarkup from '../../../static/logo.svg?raw'
 
 	let { siteName = 'Caselberg Studio' }: { siteName?: string } = $props()
 
 	const STORAGE_KEY = 'caselberg:splash-seen'
-	const DRAW_MS = 1500
-	const FILL_MS = 450
+	const ENTER_MS = 700
 	const HOLD_AFTER_MS = 700
 	const EXIT_MS = 550
 
 	let visible = $state(false)
-	let filled = $state(false)
+	let entered = $state(false)
 	let leaving = $state(false)
 	let reduceMotion = $state(false)
 
-	let logoEl: HTMLDivElement | undefined = $state()
-
-	let fillTimer: ReturnType<typeof setTimeout> | undefined
 	let holdTimer: ReturnType<typeof setTimeout> | undefined
 	let exitTimer: ReturnType<typeof setTimeout> | undefined
 	let raf: number | undefined
@@ -42,41 +38,22 @@
 		visible = true
 		await tick()
 
-		const paths = logoEl?.querySelectorAll<SVGPathElement>('path') ?? []
-
-		if (reduceMotion || paths.length === 0) {
-			// No draw-on: show the solid logo, then hold and exit.
-			filled = true
-			holdTimer = setTimeout(dismiss, DRAW_MS + HOLD_AFTER_MS)
+		if (reduceMotion) {
+			// No motion: show the logo immediately, then hold and exit.
+			entered = true
+			holdTimer = setTimeout(dismiss, HOLD_AFTER_MS)
 			return
 		}
 
-		// Prime every letter's outline as a fully "unwritten" dashed stroke.
-		for (const path of paths) {
-			const len = path.getTotalLength()
-			path.style.strokeDasharray = `${len}`
-			path.style.strokeDashoffset = `${len}`
-		}
-		// Force layout so the primed state is committed before we transition.
-		void logoEl?.getBoundingClientRect()
-
+		// Run the fade-in transition from the initial (hidden) state.
 		raf = requestAnimationFrame(() => {
-			for (const path of paths) {
-				path.style.transition = `stroke-dashoffset ${DRAW_MS}ms ease`
-				path.style.strokeDashoffset = '0'
-			}
+			entered = true
 		})
 
-		// Once the outlines are drawn, fade the solid fill in.
-		fillTimer = setTimeout(() => {
-			filled = true
-		}, DRAW_MS)
-
-		holdTimer = setTimeout(dismiss, DRAW_MS + FILL_MS + HOLD_AFTER_MS)
+		holdTimer = setTimeout(dismiss, ENTER_MS + HOLD_AFTER_MS)
 	})
 
 	onDestroy(() => {
-		if (fillTimer) clearTimeout(fillTimer)
 		if (holdTimer) clearTimeout(holdTimer)
 		if (exitTimer) clearTimeout(exitTimer)
 		if (raf) cancelAnimationFrame(raf)
@@ -92,9 +69,8 @@
 	>
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 		<div
-			bind:this={logoEl}
 			class="splash__logo"
-			class:filled
+			class:entered
 			aria-label={siteName}
 			role="img"
 		>
@@ -126,25 +102,28 @@
 		height: auto;
 	}
 
-	/* Render each letter as a white outline that "draws" in, then fills. */
-	.splash__logo :global(path) {
-		fill: #fff;
-		fill-opacity: 0;
-		stroke: #fff;
-		stroke-width: 1.5;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-		transition: fill-opacity 0.45s ease;
+	/* Fade the whole logo in with a subtle upward drift. */
+	.splash__logo {
+		opacity: 0;
+		transform: translateY(12px);
+		transition:
+			opacity 700ms ease,
+			transform 700ms ease;
 	}
 
-	.splash__logo.filled :global(path) {
-		fill-opacity: 1;
+	.splash__logo.entered {
+		opacity: 1;
+		transform: none;
+	}
+
+	.splash__logo :global(path) {
+		fill: #fff;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.splash__logo :global(path) {
-			fill-opacity: 1;
-			stroke: none;
+		.splash__logo {
+			opacity: 1;
+			transform: none;
 			transition: none;
 		}
 	}
