@@ -3,13 +3,11 @@
 	import { onNavigate } from '$app/navigation'
 	import { page } from '$app/state'
 	import { env } from '$env/dynamic/public'
-	import { PreviewMode, QueryLoader, VisualEditing } from '@sanity/sveltekit'
 	import type { SanityImageSource } from '@sanity/image-url'
 	import SiteFooter from '$lib/components/site-footer.svelte'
 	import SiteHeader from '$lib/components/site-header.svelte'
 	import SplashScreen from '$lib/components/splash-screen.svelte'
 	import { urlForImage } from '$lib/image-url'
-	import { client } from '$lib/sanity'
 	import type { NavigationItem, SiteSettings } from '$lib/types/sanity'
 	import './layout.css'
 
@@ -41,7 +39,6 @@
 			siteSettings: SiteSettings | null;
 			logoUrl: string;
 			aucklandTime: string;
-			previewEnabled: boolean;
 		};
 		children: import('svelte').Snippet;
 	}>();
@@ -91,25 +88,19 @@
 	<meta name="twitter:image" content={defaultOgImageUrl} />
 </svelte:head>
 
-<PreviewMode enabled={data.previewEnabled}>
-	<VisualEditing enabled={data.previewEnabled}>
-		<QueryLoader enabled={data.previewEnabled} {client}>
-			<div class="relative font-sans flex h-dvh max-h-dvh flex-col overflow-hidden">
-				<SiteHeader {siteName} logoUrl={data.logoUrl} {navigation} {pathname} />
-				<main
-					style="view-transition-name: page-content"
-					class="{isClients
-						? 'relative z-30 flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24'
-						: 'flex-1 min-h-0 overflow-hidden px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-24'}"
-				>
-					{@render children()}
-				</main>
-				<SiteFooter {siteName} initialAucklandTime={data.aucklandTime} />
-			</div>
-			<SplashScreen {siteName} />
-		</QueryLoader>
-	</VisualEditing>
-</PreviewMode>
+<div class="relative font-sans flex h-dvh max-h-dvh flex-col overflow-hidden">
+	<SiteHeader {siteName} logoUrl={data.logoUrl} {navigation} {pathname} />
+	<main
+		style="view-transition-name: page-content"
+		class="{isClients
+			? 'relative z-30 flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto px-5 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24'
+			: 'flex-1 min-h-0 overflow-hidden px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-24'}"
+	>
+		{@render children()}
+	</main>
+	<SiteFooter {siteName} initialAucklandTime={data.aucklandTime} />
+</div>
+<SplashScreen {siteName} />
 
 {#if browser && dev}
 	{#await import('sv-agentation') then mod}
