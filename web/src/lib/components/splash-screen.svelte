@@ -8,10 +8,9 @@
 	let { siteName = 'Caselberg Studio' }: { siteName?: string } = $props()
 
 	const STORAGE_KEY = 'caselberg:splash-seen'
-	// Initial extra letter spacing as a fraction of each glyph's distance from the
-	// wordmark centre. The gaps start wider than normal and contract to the resting
-	// positions. GSAP interpolates smoothly, so a clearly visible spread reads well.
-	const SPREAD_FACTOR = 0.06
+	// How far below its resting position the logo starts before rising into place.
+	// Deliberately tiny so the motion is barely perceptible — a settle, not a slide.
+	const RISE_OFFSET = 4
 
 	let visible = $state(false)
 	let splashEl: HTMLDivElement | undefined
@@ -53,7 +52,6 @@
 		await tick()
 
 		if (!splashEl || !logoEl) return
-		const paths = Array.from(logoEl.querySelectorAll('path'))
 
 		// gsap.context tracks every tween created inside it so onDestroy can revert
 		// them and clean up inline styles even if we leave mid-animation.
@@ -70,37 +68,15 @@
 				return
 			}
 
-			// Spread offset per letter, derived from its real horizontal position so the
-			// gather reads correctly regardless of the order paths appear in the file.
-			const centers = paths.map((p) => {
-				const box = p.getBBox()
-				return box.x + box.width / 2
-			})
-			const wordCenter = (Math.min(...centers) + Math.max(...centers)) / 2
-
-			// Starting state: word hidden, letters spread apart. GSAP drives the transform
-			// every frame (CSS transitions don't animate transform on SVG <path>), giving
-			// smooth sub-pixel motion.
-			gsap.set(logoEl!, { autoAlpha: 0 })
-			gsap.set(paths, { x: (i) => (centers[i] - wordCenter) * SPREAD_FACTOR })
+			// Starting state: word hidden and nudged slightly below its resting spot.
+			gsap.set(logoEl!, { autoAlpha: 0, y: RISE_OFFSET })
 
 			removeBackdrop()
 
 			gsap
 				.timeline({ onComplete: unmount })
-				// Word fades in.
-				.to(logoEl!, { autoAlpha: 1, duration: 0.9, ease: 'power2.out' }, 0)
-				// Letters settle to their resting positions — gentle stagger from the centre.
-				.to(
-					paths,
-					{
-						x: 0,
-						duration: 1.3,
-						ease: 'power3.out',
-						stagger: { amount: 0.2, from: 'center' }
-					},
-					0
-				)
+				// Word fades in while rising gently into place.
+				.to(logoEl!, { autoAlpha: 1, y: 0, duration: 1.1, ease: 'power2.out' }, 0)
 				// Hold, then fade the whole splash away to reveal the page.
 				.to(splashEl!, { autoAlpha: 0, duration: 0.6, ease: 'power2.inOut' }, '+=0.6')
 		}, splashEl)
