@@ -1,9 +1,11 @@
+import type { SanityLocals } from '@sanity/sveltekit';
+
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals extends SanityLocals {}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
@@ -15,6 +17,7 @@ declare module '$env/dynamic/public' {
 		PUBLIC_SANITY_PROJECT_ID?: string;
 		PUBLIC_SANITY_DATASET?: string;
 		PUBLIC_SANITY_API_VERSION?: string;
+		PUBLIC_SANITY_STUDIO_URL?: string;
 		[key: string]: string | undefined;
 	};
 }

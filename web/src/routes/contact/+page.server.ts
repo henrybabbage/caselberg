@@ -1,15 +1,27 @@
 import { contactPageQuery } from '$lib/groq';
-import { getSanityClient, isSanityConfigured } from '$lib/sanity.server';
+import { emptyParams, getPreviewLoadQueryOptions, isSanityConfigured } from '$lib/sanity.server';
 import type { ContactPage } from '$lib/types/sanity';
 
-export const load = async () => {
+export const load = async ({ locals }) => {
 	if (!isSanityConfigured()) {
-		return { contactPage: null as ContactPage | null };
+		return {
+			contactPage: null as ContactPage | null,
+			query: contactPageQuery,
+			options: { initial: { data: null as ContactPage | null, sourceMap: undefined } }
+		};
 	}
 	try {
-		const contactPage = await getSanityClient().fetch<ContactPage>(contactPageQuery);
-		return { contactPage };
+		const initial = await locals.sanity.loadQuery<ContactPage | null>(
+			contactPageQuery,
+			emptyParams(),
+			getPreviewLoadQueryOptions(locals.sanity.previewEnabled)
+		);
+		return { contactPage: initial.data, query: contactPageQuery, options: { initial } };
 	} catch {
-		return { contactPage: null as ContactPage | null };
+		return {
+			contactPage: null as ContactPage | null,
+			query: contactPageQuery,
+			options: { initial: { data: null as ContactPage | null, sourceMap: undefined } }
+		};
 	}
 };

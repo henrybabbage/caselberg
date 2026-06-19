@@ -1,103 +1,96 @@
 <script lang="ts">
 	import { onDestroy, onMount, tick } from 'svelte'
-	// Raw markup so we can reach each letter <path> and animate it (an <img> can't be).
+	import { gsap } from 'gsap'
+	// Raw markup so the logo is inlined and each letter <path> can be transformed
+	// individually (an <img> can't be styled per-shape).
 	import logoMarkup from '../../../static/logo.svg?raw'
 
 	let { siteName = 'Caselberg Studio' }: { siteName?: string } = $props()
 
 	const STORAGE_KEY = 'caselberg:splash-seen'
-	const DRAW_MS = 1500
-	const FILL_MS = 450
-	const HOLD_AFTER_MS = 700
-	const EXIT_MS = 550
+	// How far below its resting position the logo starts before rising into place.
+	// Deliberately tiny so the motion is barely perceptible — a settle, not a slide.
+	const RISE_OFFSET = 4
 
 	let visible = $state(false)
-	let filled = $state(false)
-	let leaving = $state(false)
-	let reduceMotion = $state(false)
+	let splashEl: HTMLDivElement | undefined
+	let logoEl: HTMLDivElement | undefined
 
-	let logoEl: HTMLDivElement | undefined = $state()
+	let ctx: gsap.Context | undefined
 
-	let fillTimer: ReturnType<typeof setTimeout> | undefined
-	let holdTimer: ReturnType<typeof setTimeout> | undefined
-	let exitTimer: ReturnType<typeof setTimeout> | undefined
-	let raf: number | undefined
+	function removeBackdrop() {
+		if (typeof document === 'undefined') return
+		document.getElementById('splash-backdrop')?.remove()
+	}
 
-	function dismiss() {
-		leaving = true
-		exitTimer = setTimeout(() => {
-			visible = false
-		}, EXIT_MS)
+	function unmount() {
+		visible = false
 	}
 
 	onMount(async () => {
+		let seen = false
 		try {
-			if (sessionStorage.getItem(STORAGE_KEY)) return
-			sessionStorage.setItem(STORAGE_KEY, '1')
+			seen = Boolean(sessionStorage.getItem(STORAGE_KEY))
+			if (!seen) sessionStorage.setItem(STORAGE_KEY, '1')
 		} catch {
 			// sessionStorage unavailable (e.g. privacy mode) — show once for this load.
 		}
 
-		reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-		visible = true
-		await tick()
-
-		const paths = logoEl?.querySelectorAll<SVGPathElement>('path') ?? []
-
-		if (reduceMotion || paths.length === 0) {
-			// No draw-on: show the solid logo, then hold and exit.
-			filled = true
-			holdTimer = setTimeout(dismiss, DRAW_MS + HOLD_AFTER_MS)
+		if (seen) {
+			// The inline app.html script normally already removed it; this is a safety net.
+			removeBackdrop()
 			return
 		}
 
-		// Prime every letter's outline as a fully "unwritten" dashed stroke.
-		for (const path of paths) {
-			const len = path.getTotalLength()
-			path.style.strokeDasharray = `${len}`
-			path.style.strokeDashoffset = `${len}`
-		}
-		// Force layout so the primed state is committed before we transition.
-		void logoEl?.getBoundingClientRect()
+		const reduce =
+			typeof window !== 'undefined' &&
+			window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-		raf = requestAnimationFrame(() => {
-			for (const path of paths) {
-				path.style.transition = `stroke-dashoffset ${DRAW_MS}ms ease`
-				path.style.strokeDashoffset = '0'
+		// The component (z-index 100) renders the same red as the backdrop (z-index 90),
+		// so it overlays seamlessly before we hand off.
+		visible = true
+		await tick()
+
+		if (!splashEl || !logoEl) return
+
+		// gsap.context tracks every tween created inside it so onDestroy can revert
+		// them and clean up inline styles even if we leave mid-animation.
+		ctx = gsap.context(() => {
+			if (reduce) {
+				gsap.set(logoEl!, { autoAlpha: 1 })
+				removeBackdrop()
+				gsap.to(splashEl!, {
+					autoAlpha: 0,
+					duration: 0.4,
+					delay: 1.2,
+					onComplete: unmount
+				})
+				return
 			}
-		})
 
-		// Once the outlines are drawn, fade the solid fill in.
-		fillTimer = setTimeout(() => {
-			filled = true
-		}, DRAW_MS)
+			// Starting state: word hidden and nudged slightly below its resting spot.
+			gsap.set(logoEl!, { autoAlpha: 0, y: RISE_OFFSET })
 
-		holdTimer = setTimeout(dismiss, DRAW_MS + FILL_MS + HOLD_AFTER_MS)
+			removeBackdrop()
+
+			gsap
+				.timeline({ onComplete: unmount })
+				// Word fades in while rising gently into place.
+				.to(logoEl!, { autoAlpha: 1, y: 0, duration: 1.1, ease: 'power2.out' }, 0)
+				// Hold, then fade the whole splash away to reveal the page.
+				.to(splashEl!, { autoAlpha: 0, duration: 0.6, ease: 'power2.inOut' }, '+=0.6')
+		}, splashEl)
 	})
 
 	onDestroy(() => {
-		if (fillTimer) clearTimeout(fillTimer)
-		if (holdTimer) clearTimeout(holdTimer)
-		if (exitTimer) clearTimeout(exitTimer)
-		if (raf) cancelAnimationFrame(raf)
+		ctx?.revert()
 	})
 </script>
 
 {#if visible}
-	<div
-		class="splash"
-		class:leaving
-		role="presentation"
-		aria-hidden="true"
-	>
+	<div class="splash" bind:this={splashEl} role="presentation" aria-hidden="true">
 		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-		<div
-			bind:this={logoEl}
-			class="splash__logo"
-			class:filled
-			aria-label={siteName}
-			role="img"
-		>
+		<div class="splash__logo" bind:this={logoEl} aria-label={siteName} role="img">
 			{@html logoMarkup}
 		</div>
 	</div>
@@ -112,40 +105,23 @@
 		place-items: center;
 		padding: 1.5rem;
 		background: #d40f0f;
-		opacity: 1;
-		transition: opacity 0.55s ease;
-	}
-
-	.splash.leaving {
-		opacity: 0;
 	}
 
 	.splash__logo :global(svg) {
 		display: block;
 		width: min(70vw, 520px);
 		height: auto;
+		/* Allow the spread letters to extend past the viewBox without being clipped. */
+		overflow: visible;
 	}
 
-	/* Render each letter as a white outline that "draws" in, then fills. */
+	/* Hidden until GSAP fades it in, so there's no flash before the timeline runs. */
+	.splash__logo {
+		opacity: 0;
+	}
+
 	.splash__logo :global(path) {
 		fill: #fff;
-		fill-opacity: 0;
-		stroke: #fff;
-		stroke-width: 1.5;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-		transition: fill-opacity 0.45s ease;
-	}
-
-	.splash__logo.filled :global(path) {
-		fill-opacity: 1;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.splash__logo :global(path) {
-			fill-opacity: 1;
-			stroke: none;
-			transition: none;
-		}
+		stroke: none;
 	}
 </style>
