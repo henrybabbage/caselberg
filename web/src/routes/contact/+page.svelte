@@ -1,10 +1,18 @@
 <script lang="ts">
+	import { useQuery } from '@sanity/sveltekit';
 	import ContactBlock from '$lib/components/contact-block.svelte';
 	import type { ContactPage } from '$lib/types/sanity';
 
-	let { data } = $props<{ data: { contactPage: ContactPage | null } }>();
+	let { data } = $props<{
+		data: { contactPage: ContactPage | null; query: string; options: { initial: unknown } };
+	}>();
 
-	const c = $derived(data.contactPage);
+	// svelte-ignore state_referenced_locally
+	const query = useQuery<ContactPage | null>({
+		query: data.query,
+		options: data.options
+	});
+	const c = $derived($query.data ?? data.contactPage);
 </script>
 
 <svelte:head>

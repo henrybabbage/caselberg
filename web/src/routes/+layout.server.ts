@@ -2,7 +2,7 @@ import type { SanityImageSource } from '@sanity/image-url';
 
 import { siteSettingsQuery } from '$lib/groq';
 import { urlForImage } from '$lib/image-url';
-import { getSanityClient, isSanityConfigured } from '$lib/sanity.server';
+import { emptyParams, getPreviewLoadQueryOptions, isSanityConfigured } from '$lib/sanity.server';
 import type { SiteSettings } from '$lib/types/sanity';
 
 const fallbackLogo = '/logo.svg';
@@ -17,21 +17,37 @@ function formatAucklandTime(date = new Date()): string {
 	}).format(date);
 }
 
-export const load = async () => {
+export const load = async ({ locals }) => {
 	const aucklandTime = formatAucklandTime();
 	if (!isSanityConfigured()) {
 		return {
 			siteSettings: null as SiteSettings | null,
 			logoUrl: fallbackLogo,
-			aucklandTime
+			aucklandTime,
+			previewEnabled: locals.sanity.previewEnabled
 		};
 	}
 	try {
-		const siteSettings = await getSanityClient().fetch<SiteSettings>(siteSettingsQuery);
+		const initial = await locals.sanity.loadQuery<SiteSettings | null>(
+			siteSettingsQuery,
+			emptyParams(),
+			getPreviewLoadQueryOptions(locals.sanity.previewEnabled)
+		);
+		const siteSettings = initial.data;
 		const logoUrl =
 			urlForImage(siteSettings?.logo as SanityImageSource | undefined) ?? fallbackLogo;
-		return { siteSettings, logoUrl, aucklandTime };
+		return {
+			siteSettings,
+			logoUrl,
+			aucklandTime,
+			previewEnabled: locals.sanity.previewEnabled
+		};
 	} catch {
-		return { siteSettings: null as SiteSettings | null, logoUrl: fallbackLogo, aucklandTime };
+		return {
+			siteSettings: null as SiteSettings | null,
+			logoUrl: fallbackLogo,
+			aucklandTime,
+			previewEnabled: locals.sanity.previewEnabled
+		};
 	}
 };
